@@ -531,7 +531,7 @@ else:
             spec.loader.exec_module(module)  
         except Exception as e:
             st.error(f"⚠️ Error loading {module_name}: {e}")
-=======
+    
 import importlib.util
 import streamlit as st
 import pandas as pd
