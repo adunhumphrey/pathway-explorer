@@ -262,7 +262,6 @@ if df_preview is not None:
             if dataset_name!='Oil & Gas':
                 fig.update_traces(line=dict(color="black", width=4), selector=dict(name="Median"),)
 
-=======
 import streamlit as st
 import pandas as pd
 from io import BytesIO
