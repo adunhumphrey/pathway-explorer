@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import streamlit as st
 
 col1, col2 = st.columns([0.15, 0.85])  # Left for image, right for title
@@ -116,4 +116,4 @@ with col2:
     )
 
 st.write("# Under-Construction")
->>>>>>> e0a5d923c30859d9d48b7e7034a4c9d40d271823
+
