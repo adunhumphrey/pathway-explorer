@@ -262,11 +262,6 @@ if df_preview is not None:
             if dataset_name!='Oil & Gas':
                 fig.update_traces(line=dict(color="black", width=4), selector=dict(name="Median"),)
 
-import streamlit as st
-import pandas as pd
-from io import BytesIO
-import plotly.express as px
-
 col1, col2 = st.columns([0.15, 0.85])  # Left for image, right for title
 with col1:
     st.image("SBT_Logo.png", width=300)  # Adjust width as needed
