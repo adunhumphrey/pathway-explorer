@@ -249,7 +249,7 @@ if st.session_state.selected_page == "Home":
             .title-tooltip {
                 position: relative;
                 top: 10px;   /* Moves the text down */
-                color: #C27BA0;
+                color: #8B008B;
                 left: 280px; /* Moves the text to the right */
                 text-align: left;  /* Aligns the text to the right */
             }
@@ -340,7 +340,7 @@ elif st.session_state.selected_page == "Reference":
             .title-tooltip {
                 position: relative;
                 top: 10px;   /* Moves the text down */
-                color: #C27BA0;
+                color: #8B008B;
                 left: 280px; /* Moves the text to the right */
                 text-align: left;  /* Aligns the text to the right */
             }
@@ -531,7 +531,7 @@ else:
             spec.loader.exec_module(module)  
         except Exception as e:
             st.error(f"⚠️ Error loading {module_name}: {e}")
-    
+=======
 import importlib.util
 import streamlit as st
 import pandas as pd
