@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import streamlit as st
 import pandas as pd
 from io import BytesIO
@@ -527,6 +526,4 @@ if df_preview is not None:
             fig.update_layout(height=600, width=1200)  # Adjust the height as needed (default is ~450)
             if dataset_name!='Oil & Gas':
                 fig.update_traces(line=dict(color="black", width=4), selector=dict(name="Median"),)
-
->>>>>>> e0a5d923c30859d9d48b7e7034a4c9d40d271823
             st.plotly_chart(fig)      
