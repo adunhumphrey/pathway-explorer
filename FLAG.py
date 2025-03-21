@@ -126,7 +126,7 @@ st.subheader(f"View and Filter {dataset_name}")
 # Load data preview (first 1000 rows only)
 file_path = "FLAG.xlsx"
 remove_cols = []
-filter_columns = ["Activity", "Region", "Commodity", "Unit"]
+filter_columns = ["Commodity", "Region", "Unit"]
 apply_year_filter = False
 
 #st.write(remove_cols)
