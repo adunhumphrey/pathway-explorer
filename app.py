@@ -873,7 +873,7 @@ elif st.session_state.selected_page == "Reference":
             .title-tooltip {
                 position: relative;
                 top: 10px;   /* Moves the text down */
-                color: #8B008B;
+                color: #C27BA0;
                 left: 280px; /* Moves the text to the right */
                 text-align: left;  /* Aligns the text to the right */
             }
