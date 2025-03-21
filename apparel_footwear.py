@@ -126,7 +126,7 @@ st.subheader(f"View and Filter {dataset_name}")
 # Load data preview (first 1000 rows only)
 file_path = "Alldata.xlsx"
 remove_cols = []
-filter_columns = ["Model", "Scenario", "Region", "Variable", "Unit"]
+filter_columns = ["Scenario","Metric", "Unit"]
 apply_year_filter = True
 
 #st.write(remove_cols)
