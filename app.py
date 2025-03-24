@@ -37,7 +37,7 @@ pages = {
         "file": "power_generation",
         "column": 1,  # First column
         "pathway": "IEA NZE, IPCC",
-        "metrics": ["tCO2e", "tCO2/MWh", "% Zero Carbon Capacity"],
+        "metrics": ["tCO2e", "tCO2/MWh -% Zero Carbon Capacity"],
         "color": "#6FA8DC",  # Green
     },
     "Other Industries": {
@@ -128,7 +128,7 @@ pages = {
         "file": "FLAG",
         "column": 2,  # Third column
         "pathway": "IPCC",
-        "metrics": ["tCO2e", "tCO2/m3","tCO2/freshweight"],
+        "metrics": ["tCO2e", "tCO2/m3 -tCO2/freshweight"],
         "color": "#D77932",  # Pink
     },
     "Apperal & Footwear": {
