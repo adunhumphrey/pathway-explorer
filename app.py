@@ -180,7 +180,7 @@ st.markdown(
 """
 <style>
 .stButton > button {
-background-color: #8B008B !important; /* Default color */
+background-color: #5D6371 !important; /* Default color */
 color: white !important;
 border-radius: 8px;
 font-size: 16px;
