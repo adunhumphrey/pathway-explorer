@@ -294,8 +294,7 @@ st.markdown(
 # ✅ Content Section Below Cover
 if st.session_state.selected_page == "Home":
     st.markdown('<div class="content-wrapper">', unsafe_allow_html=True)
-    
-    st.write("Here you can find all the raw data, eligible scenarios, and pathways that inform the cross-sector and sector-specific standards in the SBTi.")
+
 
     # Close content wrapper
     st.markdown('</div>', unsafe_allow_html=True)
