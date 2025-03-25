@@ -149,7 +149,7 @@ pages = {
         "file": "other_sector",
         "column": 1,  # Third column
         "pathway": "",
-        "metrics": [""],
+        "metrics": ["-","-"],
         "color": "#C27BA0",  # Pink
     },
 }
@@ -175,6 +175,33 @@ def navigate(page):
 
 # Create column layout
 col1, col2, col3, col4 = st.columns([7, 1, 1, 1])
+# Inject custom CSS to style the button
+st.markdown(
+"""
+<style>
+.stButton > button {
+background-color: #8B008B !important; /* Default color */
+color: white !important;
+border-radius: 8px;
+font-size: 16px;
+font-weight: bold;
+border: none;
+padding: 10px;
+}
+
+
+
+/* Change color when selected */
+.stButton > button:active,
+.stButton > button:focus,
+.stButton > button:hover {
+background-color: #4B0082 !important; /* Darker purple */
+color: white !important;
+}
+</style>
+""",
+unsafe_allow_html=True
+)
 # Render buttons with conditional highlighting
 with col2:
     if st.button("Home", use_container_width=True, 
@@ -391,7 +418,7 @@ elif st.session_state.selected_page == "Reference":
 
         /* Style for tab when hovered */
         .stTabs [data-baseweb="tab"]:hover {
-            background-color:rgb(0, 151, 133);  /* Darker green when hovered */
+            background-color:rgb(211, 151, 133);  /* Darker green when hovered */
             cursor: pointer;  /* Change cursor to pointer when hovered */
         }
 
