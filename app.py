@@ -391,7 +391,7 @@ elif st.session_state.selected_page == "Reference":
 
         /* Style for tab when hovered */
         .stTabs [data-baseweb="tab"]:hover {
-            background-color:rgb(211, 151, 133);  /* Darker green when hovered */
+            background-color:rgb(0, 151, 133);  /* Darker green when hovered */
             cursor: pointer;  /* Change cursor to pointer when hovered */
         }
 
