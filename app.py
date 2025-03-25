@@ -202,64 +202,78 @@ with col4:
 
 #    with col2:
 #        st.title(st.session_state.selected_page)
+import base64
 
-# ✅ Main Page with Tiles in 3 Columns
+# Function to encode image to base64
+def get_base64_image(image_path):
+    with open(image_path, "rb") as image_file:
+        encoded = base64.b64encode(image_file.read()).decode()
+    return f"data:image/png;base64,{encoded}"  # Change format if needed (png, jpg, etc.)
+
+# Get the base64 image
+background_image = get_base64_image("background.jpg")  # Replace with your local file name
+logo_image = get_base64_image("SBT_Logo.png")  # Ensure logo remains visible
+
+# Inject CSS for the background image with the existing logo size & position
+st.markdown(
+    f"""
+    <style>
+    .cover-container {{
+        position: relative;
+        width: 100%;
+        height: 350px; /* Adjust height as needed */
+        background: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.3)), 
+                    url("{background_image}") no-repeat center center;
+        background-size: cover;
+        display: flex;
+        align-items: center;
+        justify-content: left;
+        padding-left: 50px; /* Ensures logo remains aligned */
+    }}
+
+    .overlay {{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 50px; /* Space between logo and title */
+        background: rgba(0, 0, 0, 0); /* Semi-transparent background */
+        padding: 20px;
+        border-radius: 10px;
+    }}
+
+    .title {{
+        color: #8B008B;
+        font-size: 50px;
+        font-weight: bold;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# ✅ Cover Image Section with Logo & Title
+st.markdown(
+    f"""
+    <div class="cover-container">
+        <div class="overlay">
+            <img src="{logo_image}" width="300">  <!-- Embedded base64 logo -->
+            <div class="title">Pathway Explorer</div>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+# ✅ Content Section Below Cover
 if st.session_state.selected_page == "Home":
-    col1, col2 = st.columns([0.15, 0.85])  # Left for image, right for title
-    with col1:
-        st.image("SBT_Logo.png", width=300)  # Adjust width as needed
+    st.markdown('<div class="content-wrapper">', unsafe_allow_html=True)
+    
+    st.write("Here you can find all the raw data, eligible scenarios, and pathways that inform the cross-sector and sector-specific standards in the SBTi.")
 
-    with col2:
-        st.markdown(
-            """
-            <style>
-            /* Tooltip styling for title */
-            .title-tooltip {
-                position: relative;
-                display: inline-block;
-                cursor: pointer;
-            }
+    # Close content wrapper
+    st.markdown('</div>', unsafe_allow_html=True)
 
-            /* Tooltip text */
-            .title-tooltip:hover::after {
-                content: attr(data-tooltip);
-                position: absolute;
-                bottom: 100%;
-                left: 50%;
-                transform: translateX(-50%);
-                background-color: rgba(0, 0, 0, 0.7); /* Dark background for the tooltip */
-                color: white;
-                padding: 5px;
-                border-radius: 5px;
-                font-size: 12px;
-                white-space: nowrap;
-                z-index: 1;  /* Ensure tooltip is above */
-                opacity: 1;
-                transition: opacity 0.3s;
-            }
-            </style>
-            """,
-            unsafe_allow_html=True
-        )
-        # Add the title with a tooltip
-        st.markdown(
-            """
-            <style>
-            .title-tooltip {
-                position: relative;
-                top: 10px;   /* Moves the text down */
-                color: #8B008B;
-                left: 280px; /* Moves the text to the right */
-                text-align: left;  /* Aligns the text to the right */
-            }
-            </style>
-            <div class="title-tooltip" data-tooltip="Explore various pathways for climate action">
-                <span style="font-size: 50px; font-weight: bold;">Pathway Explorer</span>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-    st.write("Here you can find all the raw data, eligible scenarios and pathways that informs the cross sector and sector-specific standards in the SBTi")
+
     col1, col2, col3 = st.columns(3)  # Three columns for tiles
 
     # ✅ Render tiles into assigned columns
