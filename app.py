@@ -284,7 +284,7 @@ st.markdown(
     <div class="cover-container">
         <div class="overlay">
             <img src="{logo_image}" width="300">  <!-- Embedded base64 logo -->
-            <div class="title">Pathway Explorer</div>
+            <div class="title"></div>
         </div>
     </div>
     """,
