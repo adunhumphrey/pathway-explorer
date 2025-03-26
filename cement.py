@@ -190,9 +190,9 @@ if df_preview is not None:
                 unit = df_combined["Unit"].unique()[0]
             else: unit='Unit (Mixed)'
 
-            if df_combined["Variable"].nunique()==1:
-                title_val = df_combined["Variable"].unique()[0]
-            else: title_val='Multiple Variables'
+            if df_combined["Metric"].nunique()==1:
+                title_val = df_combined["Metric"].unique()[0]
+            else: title_val='Multiple Metrics'
             
             
             # Plotly line chart with multiple lines for different models
