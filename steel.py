@@ -3,7 +3,7 @@ import pandas as pd
 from io import BytesIO
 import plotly.express as px
 
-
+dataset_name = "Steel"
 # Function to load data preview (first 100 rows)
 @st.cache_data
 def load_data_preview(file_path):
