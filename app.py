@@ -155,7 +155,7 @@ pages = {
 }
 
 # ✅ Set page config
-st.set_page_config(page_title="Pathway Explorer", layout="wide")
+st.set_page_config(page_title="", layout="wide")
 
 # ✅ Get the selected page from URL reference (if exists)
 query_params = st.query_params
