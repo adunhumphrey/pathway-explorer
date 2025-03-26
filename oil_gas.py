@@ -194,7 +194,7 @@ if df_preview is not None:
             else: title_val='Multiple Metrics'
             
             
-            # Plotly line chart with multiple lines for different models
+# Plotly line chart with multiple lines for different models
             fig = px.line(df_combined, x="Year", y="Value", color="Scenario",
                         title=f'"{title_val}" - Trend Comparison',
                         labels={"Value": unit, "Year": "Year", "Scenario": "Scenario"},
@@ -203,5 +203,9 @@ if df_preview is not None:
             fig.update_xaxes(type="linear",)
             # Set chart height
             fig.update_layout(height=600, width=1200)  # Adjust the height as needed (default is ~450)
+            if dataset_name!='Oil & Gas':
+                fig.update_traces(line=dict(color="black", width=4), selector=dict(name="Median"),)
 
-            st.plotly_chart(fig)      
+            st.plotly_chart(fig)          
+
+            
