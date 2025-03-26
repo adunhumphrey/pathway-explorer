@@ -197,7 +197,7 @@ if df_preview is not None:
 # Plotly line chart with multiple lines for different models
             fig = px.line(df_combined, x="Year", y="Value", color="Scenario",
                         title=f'"{title_val}" - Trend Comparison',
-                        labels={"Value": unit, "Year": "Year", "Scenario": "Scenario"},
+                        labels={"Value": unit, "Year": "Year", "Metric": "Metric"},
                         markers=True)  # Add markers to check if points are plotted
             
             fig.update_xaxes(type="linear",)
