@@ -9,8 +9,6 @@ from streamlit import session_state as ss
 import plotly.express as px
 from streamlit_pdf_viewer import pdf_viewer
  
-
-
 # Function to load data preview (first 100 rows)
 @st.cache_data
 def load_data_preview(file_path):
@@ -119,13 +117,13 @@ tabs = st.tabs(["IPCC", "FINZ"])
 datasets_info = {
     "IPCC": {
         "file_path": "C1-3_summary_2050_variable.csv",
-        "filter_columns": ["Category", "Scenario", "Metric",'Unit'],
+        "filter_columns": ["Category", "Model", "Scenario", "Region", "Variable",'Unit'],
         "remove_columns": [],
         "apply_year_filter": True
     },
     "FINZ": {
         "file_path": "FINZ.xlsx",
-        "filter_columns": ["Scenario","Metric", "Unit"],
+        "filter_columns": ["Model", "Scenario"],
         "remove_columns": [],
         "apply_year_filter": False
         },
@@ -268,7 +266,7 @@ for idx, tab in enumerate(tabs):
                         else: unit='Unit (Mixed)'
 
                         if df_combined["Variable"].nunique()==1:
-                            title_val = df_combined["Metric"].unique()[0]
+                            title_val = df_combined["Variable"].unique()[0]
                         else: title_val='Multiple Variables'
                         
                         
@@ -292,15 +290,15 @@ for idx, tab in enumerate(tabs):
                         #print(df_full.columns)
                         df_full = df_full[~df_full.apply(lambda row: row.astype(str).str.contains('Median').any(), axis=1)]
 
-                        df_melted = df_full.melt(id_vars=["Metric", "Scenario", "Unit"], 
+                        df_melted = df_full.melt(id_vars=["Metric", "Model", "Scenario", "Unit", "scen_id"], 
                                             value_vars=[(year) for year in range(2020, 2051, 5)], 
                                             var_name="Year", value_name="Value")
 
                         # Calculate the median across all models for each year
                         median_values = df_melted.groupby('Year')['Value'].median().reset_index()
-                       
+                        median_values['Model'] = 'Median - ALL'
                         median_values['Scenario'] = 'Median - ALL'
-                       
+                        median_values['scen_id'] = 'Median - ALL'
 
                         # Combine the original data with the median data
                         df_combined = pd.concat([df_melted, median_values])
@@ -319,7 +317,7 @@ for idx, tab in enumerate(tabs):
                                     markers=True)
 
                         # Set the line styles for median and other models
-                        fig.update_traces(line=dict(color="grey"), selector=dict(name="Scenario"))
+                        fig.update_traces(line=dict(color="grey"), selector=dict(name="scen_id"))
                         fig.update_traces(line=dict(color="black", width=4), selector=dict(name="Median - ALL"),)
 
                         # Set chart height
@@ -339,9 +337,9 @@ for idx, tab in enumerate(tabs):
 
                         # Calculate the median across all models for each year
                         median_values = df_melted.groupby('Year')['Value'].median().reset_index()
-    
+                        median_values['Model'] = 'Median - ALL'
                         median_values['Scenario'] = 'Median - ALL'
-                
+                        median_values['scen_id'] = 'Median - ALL'
                         
                         
                         if df_melted["Building type"].nunique()==1:

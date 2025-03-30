@@ -4,7 +4,7 @@ from io import BytesIO
 import plotly.express as px
 
 
-dataset_name = "power generation"
+dataset_name = "Power Generation"
 # Function to load data preview (first 100 rows)
 @st.cache_data
 def load_data_preview(file_path):
@@ -70,6 +70,7 @@ st.subheader(f"View and Filter {dataset_name}")
                
 # Load data preview (first 1000 rows only)
 file_path = "Power Sector.xlsx"
+milestone_image1 = 'power_sector_s1.png'
 remove_cols = []
 filter_columns = ["Scenario","Metric", "Unit"]
 apply_year_filter = True
@@ -78,8 +79,12 @@ apply_year_filter = True
 df_preview = load_data_preview(file_path)
 df_preview.drop(columns=remove_cols,inplace=True)
 if df_preview is not None:
-    st.write("### Data Preview")
-    st.dataframe(df_preview.head(), hide_index=True)
+    #st.write("### Data Preview")
+    #st.dataframe(df_preview.head(), hide_index=True)
+
+    # Milestone Image 
+    st.write("### Key Milestone")
+    st.image(milestone_image1)
 
     # Load full data for filtering purposes (without limiting to preview rows)
     df_full = load_full_data(file_path,None,None)
@@ -159,41 +164,43 @@ if df_preview is not None:
         year_columns = sorted(year_columns, key=int)
 
 
-        if dataset_name=="Power-Sector":
-            #st.write("### Visualizing Data")
-            # Calculate the median line across all years
-            #print(df_full.columns)
-            df_full = df_full[~df_full.apply(lambda row: row.astype(str).str.contains('Median').any(), axis=1)]
 
-            df_melted = df_full.melt(id_vars=["Scenario", "Metric", "Unit",], 
-                                value_vars=[(year) for year in range(2020, 2051, 5)], 
-                                var_name="Year", value_name="Value")
+        #st.write("### Visualizing Data")
+        # Calculate the median line across all years
+        #print(df_full.columns)
+        df_full = df_full[~df_full.apply(lambda row: row.astype(str).str.contains('Median').any(), axis=1)]
 
-            # Calculate the median across all models for each year
-            median_values = df_melted.groupby('Year')['Value'].median().reset_index()
-            median_values['Scenario'] = 'Median - ALL'
+        df_melted = df_full.melt(id_vars=filter_columns, 
+                            value_vars=[(year) for year in range(2020, 2051, 5)], 
+                            var_name="Year", value_name="Value")
 
-            # Combine the original data with the median data
-            df_combined = pd.concat([df_melted, median_values])
-            
-            if df_combined["Unit"].nunique()==1:
-                unit = df_combined["Unit"].unique()[0]
-                metric_name = df_combined["Metric"].unique()[0]
-            else: 
-                unit='Unit (Mixed)'
-                metric_name = "Multiple Metric"
+        # Calculate the median across all models for each year
+        median_values = df_melted.groupby('Year')['Value'].median().reset_index()
+        #median_values['Model'] = 'Median - ALL'
+        median_values['Scenario'] = 'Median - ALL'
+        #median_values['scen_id'] = 'Median - ALL'
 
-            # Plot the line chart
-            fig = px.line(df_combined, x="Year", y="Value", color="Scenario", 
-                        title= metric_name, 
-                        labels={"Value": unit, "Year": "Year", "Scenario": "Scenario"},
-                        markers=True)
+        # Combine the original data with the median data
+        df_combined = pd.concat([df_melted, median_values])
+        
+        if df_combined["Unit"].nunique()==1:
+            unit = df_combined["Unit"].unique()[0]
+            metric_name = df_combined["Metric"].unique()[0]
+        else: 
+            unit='Unit (Mixed)'
+            metric_name = "Multiple Metric"
 
-            # Set the line styles for median and other models
-            fig.update_traces(line=dict(color="grey"), selector=dict(name="scen_id"))
-            fig.update_traces(line=dict(color="black", width=4), selector=dict(name="Median - ALL"),)
+        # Plot the line chart
+        fig = px.line(df_combined, x="Year", y="Value", color="Scenario", 
+                    title= metric_name, 
+                    labels={"Value": unit, "Year": "Year", "Scenario": "Scenario"},
+                    markers=True)
 
-            # Set chart height
-            fig.update_layout(height=600, width=1200)  # Adjust the height as needed (default is ~450)
-            # Display the plot in Streamlit
-            st.plotly_chart(fig)
+        # Set the line styles for median and other models
+        fig.update_traces(line=dict(color="grey"), selector=dict(name="scen_id"))
+        fig.update_traces(line=dict(color="black", width=4), selector=dict(name="Median - ALL"),)
+
+        # Set chart height
+        fig.update_layout(height=600, width=1200)  # Adjust the height as needed (default is ~450)
+        # Display the plot in Streamlit
+        st.plotly_chart(fig)
