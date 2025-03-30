@@ -295,7 +295,7 @@ import streamlit.components.v1 as components
 
 # List of text messages
 messages = [
-    "<span style='font-size: 32px; font-weight: bold;'>Welcome to our Platform!</span><br> <span style='font-size: 17px; font-weight: 100;'>This is Pathway Explorer, your gateway to SBTi Data</span>",
+    "<span style='font-size: 32px; font-weight: bold;'>What is the Goal?</span><br> <span style='font-size: 17px; font-weight: 100;'>The Explorer provides emission scenarios, sectoral pathways, relevant metrics, and interim benchmarks that align with the Paris Agreement’s 1.5°C goal. It offers detailed insights across key sectors, including power, light and heavy industry, buildings, transport, and FLAG (Forestry, Land Use and Agriculture). The tool also presents fossil fuel phase-out dates, residual emissions levels at net zero, and investment needs for sectors like power and transport.</span>",
     "<span style='font-size: 32px; font-weight: bold;'>What is Our Goal?</span><br>",
     "<span style='font-size: 32px; font-weight: bold;'>How it can help you?</span><br>",
     ]
