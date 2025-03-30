@@ -155,7 +155,7 @@ pages = {
 }
 
 # ✅ Set page config
-st.set_page_config(page_title="", layout="wide")
+st.set_page_config(page_title="Pathway Explorer", layout="wide")
 
 # ✅ Get the selected page from URL reference (if exists)
 query_params = st.query_params
@@ -177,34 +177,34 @@ def navigate(page):
 col1, col2, col3, col4 = st.columns([7, 1, 1, 1])
 # Inject custom CSS to style the button
 st.markdown(
-"""
-<style>
-.stButton > button {
-background-color: #5D6371 !important; /* Default color */
-color: white !important;
-border-radius: 8px;
-font-size: 16px;
-font-weight: bold;
-border: none;
-padding: 10px;
-}
+    """
+    <style>
+    .stButton > button {
+        background-color: #8B008B !important; /* Default color */
+        color: white !important;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        padding: 10px;
+    }
 
-
-
-/* Change color when selected */
-.stButton > button:active,
-.stButton > button:focus,
-.stButton > button:hover {
-background-color: #4B0082 !important; /* Darker purple */
-color: white !important;
-}
-</style>
-""",
-unsafe_allow_html=True
+    /* Change color when selected */
+    .stButton > button:active, 
+    .stButton > button:focus, 
+    .stButton > button:hover {
+        background-color: #4B0082 !important; /* Darker purple */
+        color: white !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
 )
+
+
 # Render buttons with conditional highlighting
 with col2:
-    if st.button("Home", use_container_width=True, 
+    if st.button("Home", use_container_width=True,  
                  type="primary" if st.session_state.selected_page== "Home" else "secondary"):
         navigate("Home")
 
@@ -284,20 +284,86 @@ st.markdown(
     <div class="cover-container">
         <div class="overlay">
             <img src="{logo_image}" width="300">  <!-- Embedded base64 logo -->
-            <div class="title"></div>
+            <!-- this is a comment <div class="title">Pathway Explorer</div> -->
         </div>
     </div>
     """,
     unsafe_allow_html=True
 )
+import streamlit as st
+import streamlit.components.v1 as components
+
+# List of text messages
+messages = [
+    "<span style='font-size: 32px; font-weight: bold;'>Welcome to our Platform!</span><br> <span style='font-size: 17px; font-weight: 100;'>This is Pathway Explorer, your gateway to SBTi Data</span>",
+    "<span style='font-size: 32px; font-weight: bold;'>What is Our Goal?</span><br>",
+    "<span style='font-size: 32px; font-weight: bold;'>How it can help you?</span><br>",
+    ]
+
+# JavaScript-friendly format (convert Python list to JSON string)
+import json
+messages_js = json.dumps(messages)
+
+# JavaScript & HTML for the text slider
+html_code = f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        #slider-text {{
+            font-size: 24px;
+            text-align: center;
+            padding: 10px;
+            transition: opacity 0.5s;
+            line-height: 1.5;
+        }}
+    </style>
+</head>
+<body>
+
+    <div id="slider-text">{messages[0]}</div>
+
+    <script>
+        var messages = {messages_js};  // Messages from Python
+        var index = 0;
+        var interval = setInterval(slideText, 3000);  // Change text every 1 sec
+
+        function slideText() {{
+            var textDiv = document.getElementById("slider-text");
+            textDiv.style.opacity = "0";  // Fade out effect
+
+            setTimeout(function() {{
+                index = (index + 1) % messages.length;
+                textDiv.innerHTML = messages[index];
+                textDiv.style.opacity = "1";  // Fade in effect
+            }}, 500);
+        }}
+
+        // Pause on hover
+        document.getElementById("slider-text").addEventListener("mouseover", function() {{
+            clearInterval(interval);
+        }});
+
+        document.getElementById("slider-text").addEventListener("mouseout", function() {{
+            interval = setInterval(slideText, 3000);
+        }});
+    </script>
+
+</body>
+</html>
+"""
+
+# Render the HTML inside Streamlit
+components.html(html_code, height=150)  # Increased height for better visibility
 
 # ✅ Content Section Below Cover
 if st.session_state.selected_page == "Home":
-    st.markdown('<div class="content-wrapper">', unsafe_allow_html=True)
-
+    #st.markdown('<div class="content-wrapper">', unsafe_allow_html=True)
+    
+    #st.write("Here you can find all the raw data, eligible scenarios, and pathways that inform the cross-sector and sector-specific standards in the SBTi.")
 
     # Close content wrapper
-    st.markdown('</div>', unsafe_allow_html=True)
+    #st.markdown('</div>', unsafe_allow_html=True)
 
 
     col1, col2, col3 = st.columns(3)  # Three columns for tiles
