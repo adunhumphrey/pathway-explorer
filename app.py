@@ -295,9 +295,9 @@ import streamlit.components.v1 as components
 
 # List of text messages
 messages = [
-    "<span style='font-size: 32px; font-weight: bold;'>What is the Goal?</span><br> <span style='font-size: 17px; font-weight: 100;'>The Explorer provides emission scenarios, sectoral pathways, relevant metrics, and interim benchmarks that align with the Paris Agreement’s 1.5°C goal. It offers detailed insights across key sectors, including power, light and heavy industry, buildings, transport, and FLAG (Forestry, Land Use and Agriculture). </span>",
-    "<span style='font-size: 32px; font-weight: bold;'>What is Our Goal?</span><br>",
-    "<span style='font-size: 32px; font-weight: bold;'>How it can help you?</span><br>",
+    "<span style='font-size: 32px; font-weight: bold;'>What is the Goal?</span><br> <span style='font-size: 17px; font-weight: 100;'>The Pathway Explorer provides emission scenarios, sectoral pathways, relevant metrics, and interim benchmarks that align with the Paris Agreement’s 1.5°C goal. It offers detailed insights across key sectors, including power, light and heavy industry, buildings, transport, and FLAG (Forestry, Land Use and Agriculture). </span>",
+    "<span style='font-size: 32px; font-weight: bold;'>How is it Designed?</span><br><span style='font-size: 17px; font-weight: 100;'>The Pathway Explorer contains scenarios that pass the SBTi's six updated principles, which ensure that pathways meet the highest standards of ambition, responsibility, scientific rigor, actionability, robustness, and transparency. These principles guide the selection of 1.5°C-aligned trajectories for credible and science-based decarbonization planning ",
+    "<span style='font-size: 32px; font-weight: bold;'>Why it Matters?</span><br><span style='font-size: 17px; font-weight: 100;'>In a crowded landscape of climate scenarios, the Explorer offers transparent, science-based benchmarks aligned with robust principles — helping close the ambition-to-action gap. ",
     ]
 
 # JavaScript-friendly format (convert Python list to JSON string)
