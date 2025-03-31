@@ -175,7 +175,7 @@ if df_preview is not None:
         # Calculate the median across all models for each year
         median_values = df_melted.groupby('Year')['Value'].median().reset_index()
         #median_values['Model'] = 'Median - ALL'
-        median_values['Scenario'] = 'Median - ALL'
+        median_values['Scenario'] = '50th Percentile'
         #median_values['scen_id'] = 'Median - ALL'
 
         # Combine the original data with the median data
