@@ -70,6 +70,7 @@ st.subheader(f"View and Filter {dataset_name}")
                
 # Load data preview (first 1000 rows only)
 file_path = "N2Oandchemical.xlsx"
+milestone_image1 = 'chemical_s1.png'
 remove_cols = []
 filter_columns = ["Category", "Metric", "Unit"]
 apply_year_filter = False
@@ -78,8 +79,12 @@ apply_year_filter = False
 df_preview = load_data_preview(file_path)
 df_preview.drop(columns=remove_cols,inplace=True)
 if df_preview is not None:
-    st.write("### Data Preview")
-    st.dataframe(df_preview.head(), hide_index=True)
+    #st.write("### Data Preview")
+    #st.dataframe(df_preview.head(), hide_index=True)
+
+    # Milestone Image 
+    st.write("### Key Milestone")
+    st.image(milestone_image1)
 
     # Load full data for filtering purposes (without limiting to preview rows)
     df_full = load_full_data(file_path,None,None)
@@ -158,33 +163,33 @@ if df_preview is not None:
         year_columns = [(col) for col in df_full.columns if str(col).isdigit()]
         year_columns = sorted(year_columns, key=int)
 
-        if dataset_name == "Chemical":
-            df_full.columns = df_full.columns.astype(str)
 
-            # Melt DataFrame for Plotly
-            df_melted = df_full.melt(id_vars=["Category", "Metric", "Unit"], 
-                                    var_name="Year", 
-                                    value_name="Value")
+        df_full.columns = df_full.columns.astype(str)
 
-            # Streamlit App
-            st.title("Parameter Trends Over Time")
+        # Melt DataFrame for Plotly
+        df_melted = df_full.melt(id_vars=["Category", "Metric", "Unit"], 
+                                var_name="Year", 
+                                value_name="Value")
 
-            # Loop through each unique Parameter and plot separate charts
-            for i, param in enumerate(df_melted["Parameter"].unique()):
-                df_filtered = df_melted[df_melted["Parameter"] == param]
-                unit = df_melted["Unit"].unique()[0]
+        # Streamlit App
+        st.title("Metric Trends Over Time")
 
-                # Create line chart
-                fig = px.line(df_filtered, 
-                            x="Year", 
-                            y="Value", 
-                            color="Category",
-                            markers=True,  # Add markers to data points
-                            labels={"Value": unit},
-                            title=f"{param} - Line Chart by Category")
-                
-                # Ensure x-axis only shows the available years in data
-                fig.update_xaxes(type="linear")
+        # Loop through each unique Parameter and plot separate charts
+        for i, param in enumerate(df_melted["Metric"].unique()):
+            df_filtered = df_melted[df_melted["Metric"] == param]
+            unit = df_melted["Unit"].unique()[0]
 
-                # Display chart in Streamlit
-                st.plotly_chart(fig, use_container_width=True)
+            # Create line chart
+            fig = px.line(df_filtered, 
+                        x="Year", 
+                        y="Value", 
+                        color="Category",
+                        markers=True,  # Add markers to data points
+                        labels={"Value": unit},
+                        title=f"{param} - Line Chart by Category")
+            
+            # Ensure x-axis only shows the available years in data
+            fig.update_xaxes(type="linear")
+
+            # Display chart in Streamlit
+            st.plotly_chart(fig, use_container_width=True)

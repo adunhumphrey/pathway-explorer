@@ -71,6 +71,7 @@ st.subheader(f"View and Filter {dataset_name}")
                
 # Load data preview (first 1000 rows only)
 file_path = "buildings.xlsx"
+milestone_image1 = 'commercial_s1.png'
 remove_cols = []
 filter_columns = ["Target type", "Scope / Emissions boundary",	"Unit", "Geography","Country", "Building type"]
 apply_year_filter = False
@@ -80,8 +81,12 @@ df_preview = load_data_preview(file_path)
 df_preview.drop(columns=remove_cols,inplace=True)
 df_preview = df_preview[~df_preview['Building type'].str.contains("esidentia", case=False, na=False)]
 if df_preview is not None:
-    st.write("### Data Preview")
-    st.dataframe(df_preview.head(), hide_index=True)
+    #st.write("### Data Preview")
+    #st.dataframe(df_preview.head(), hide_index=True)
+
+    # Milestone Image 
+    st.write("### Key Milestone")
+    st.image(milestone_image1)
 
     # Load full data for filtering purposes (without limiting to preview rows)
     df_full = load_full_data(file_path,None,None)
@@ -161,42 +166,41 @@ if df_preview is not None:
         year_columns = [(col) for col in df_full.columns if str(col).isdigit()]
         year_columns = sorted(year_columns, key=int)
 
-        if dataset_name == "Commercial":
-            #st.write("### Visualizing Data")
-            # Calculate the median line across all years
-            #print(df_full.columns)
-            df_full = df_full[~df_full.apply(lambda row: row.astype(str).str.contains('Median').any(), axis=1)]
+        #st.write("### Visualizing Data")
+        # Calculate the median line across all years
+        #print(df_full.columns)
+        df_full = df_full[~df_full.apply(lambda row: row.astype(str).str.contains('Median').any(), axis=1)]
 
-            df_melted = df_full.melt(id_vars=filter_columns, 
-                                value_vars=[(year) for year in range(2030, 2055, 5)], 
-                                var_name="Year", value_name="Value")
+        df_melted = df_full.melt(id_vars=filter_columns, 
+                            value_vars=[(year) for year in range(2030, 2055, 5)], 
+                            var_name="Year", value_name="Value")
 
-            # Calculate the median across all models for each year
-            median_values = df_melted.groupby('Year')['Value'].median().reset_index()
-            median_values['Model'] = 'Median - ALL'
-            median_values['Scenario'] = 'Median - ALL'
-            median_values['scen_id'] = 'Median - ALL'
-            
-            
-            if df_melted["Building type"].nunique()==1:
+        # Calculate the median across all models for each year
+        median_values = df_melted.groupby('Year')['Value'].median().reset_index()
+        median_values['Model'] = 'Median - ALL'
+        median_values['Scenario'] = 'Median - ALL'
+        median_values['scen_id'] = 'Median - ALL'
+        
+        
+        if df_melted["Building type"].nunique()==1:
 
-                if df_melted["Unit"].nunique()==1:
-                    unit = df_melted["Unit"].unique()[0]
-                    metric_name = df_melted["Building type"].unique()[0]
-                else: 
-                    unit='Unit (Mixed)'
-                    metric_name = "Multiple Building type"
-                # Plot the line chart
-                fig = px.line(df_melted, x="Year", y="Value", color="Country", 
-                            title= metric_name, 
-                            labels={"Value": unit, "Year": "Year", "Country": "Country"},
-                            markers=True)
+            if df_melted["Unit"].nunique()==1:
+                unit = df_melted["Unit"].unique()[0]
+                metric_name = df_melted["Building type"].unique()[0]
+        else: 
+            unit='Unit (Mixed)'
+            metric_name = "Multiple Building type"
+        # Plot the line chart
+        fig = px.line(df_melted, x="Year", y="Value", color="Country", 
+                    title= metric_name, 
+                    labels={"Value": unit, "Year": "Year", "Country": "Country"},
+                    markers=True)
 
-                # Set the line styles for median and other models
-                fig.update_traces(line=dict(color="grey"), selector=dict(name="Country"))
-                fig.update_traces(line=dict(color="black", width=4), selector=dict(name="Median - ALL"),)
+        # Set the line styles for median and other models
+        fig.update_traces(line=dict(color="grey"), selector=dict(name="Country"))
+        fig.update_traces(line=dict(color="black", width=4), selector=dict(name="Median - ALL"),)
 
-                # Set chart height
-                fig.update_layout(height=600, width=1200)  # Adjust the height as needed (default is ~450)
-                # Display the plot in Streamlit
-                st.plotly_chart(fig)
+        # Set chart height
+        fig.update_layout(height=600, width=1200)  # Adjust the height as needed (default is ~450)
+        # Display the plot in Streamlit
+        st.plotly_chart(fig)
