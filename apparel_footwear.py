@@ -3,60 +3,6 @@ import pandas as pd
 from io import BytesIO
 import plotly.express as px
 
-col1, col2 = st.columns([0.15, 0.85])  # Left for image, right for title
-with col1:
-    st.image("SBT_Logo.png", width=300)  # Adjust width as needed
-
-with col2:
-    st.markdown(
-        """
-        <style>
-        /* Tooltip styling for title */
-        .title-tooltip {
-            position: relative;
-            display: inline-block;
-            cursor: pointer;
-        }
-
-        /* Tooltip text */
-        .title-tooltip:hover::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0, 0, 0, 0.7); /* Dark background for the tooltip */
-            color: white;
-            padding: 5px;
-            border-radius: 5px;
-            font-size: 12px;
-            white-space: nowrap;
-            z-index: 1;  /* Ensure tooltip is above */
-            opacity: 1;
-            transition: opacity 0.3s;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
-    # Add the title with a tooltip
-    st.markdown(
-        """
-        <style>
-        .title-tooltip {
-            position: relative;
-            top: 10px;   /* Moves the text down */
-            color: #8B008B;
-            left: 280px; /* Moves the text to the right */
-            text-align: left;  /* Aligns the text to the right */
-        }
-        </style>
-        <div class="title-tooltip" data-tooltip="Explore various pathways for climate action">
-            <span style="font-size: 50px; font-weight: bold;">Pathway Explorer</span>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
 
 dataset_name = "Cross-Sector Pathways"
 
@@ -125,16 +71,21 @@ st.subheader(f"View and Filter {dataset_name}")
                
 # Load data preview (first 1000 rows only)
 file_path = "Alldata.xlsx"
+milestone_image1 = 'apparel_footwear_s1.png'
 remove_cols = []
 filter_columns = ["Scenario","Metric", "Unit"]
 apply_year_filter = True
 
 #st.write(remove_cols)
-df_preview = load_data_preview(file_path)
-df_preview.drop(columns=remove_cols,inplace=True)
+df_preview = load_data_preview(file_path).head()
+#df_preview.drop(columns=remove_cols,inplace=True)
 if df_preview is not None:
-    st.write("### Data Preview")
-    st.dataframe(df_preview.head(), hide_index=True)
+    #st.write("### Data Preview")
+    #st.dataframe(df_preview.head(), hide_index=True)
+
+    # Milestone Image 
+    st.write("### Key Milestone")
+    st.image(milestone_image1)
 
     # Load full data for filtering purposes (without limiting to preview rows)
     df_full = load_full_data(file_path,None,None)
@@ -259,5 +210,6 @@ if df_preview is not None:
             fig.update_xaxes(type="linear",)
             # Set chart height
             fig.update_layout(height=600, width=1200)  # Adjust the height as needed (default is ~450)
-            if dataset_name!='Oil & Gas':
-                fig.update_traces(line=dict(color="black", width=4), selector=dict(name="Median"),)
+
+            fig.update_traces(line=dict(color="black", width=4), selector=dict(name="Median"),)
+            st.plotly_chart(fig)  
