@@ -353,11 +353,11 @@ html_code = f"""
 </html>
 """
 
-# Render the HTML inside Streamlit
-components.html(html_code, height=150)  # Increased height for better visibility
 
 # ✅ Content Section Below Cover
 if st.session_state.selected_page == "Home":
+    # Render the HTML inside Streamlit
+    components.html(html_code, height=150)  # Increased height for better visibility
     #st.markdown('<div class="content-wrapper">', unsafe_allow_html=True)
     
     #st.write("Here you can find all the raw data, eligible scenarios, and pathways that inform the cross-sector and sector-specific standards in the SBTi.")
