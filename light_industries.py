@@ -3,7 +3,7 @@ import pandas as pd
 from io import BytesIO
 import plotly.express as px
 
-dataset_name = "Other industry"
+dataset_name = "light industries"
 
 # Function to load data preview (first 100 rows)
 @st.cache_data
@@ -69,8 +69,8 @@ st.subheader(f"View and Filter {dataset_name}")
 
                
 # Load data preview (first 1000 rows only)
-file_path = "Other Industries.xlsx"
-milestone_image1 = 'other_indus_s1.png'
+file_path = "Light Industries.xlsx"
+milestone_image1 = 'light_indus_s1.png'
 remove_cols = []
 filter_columns = ["Scenario", "Metric", "Unit"]
 apply_year_filter = False

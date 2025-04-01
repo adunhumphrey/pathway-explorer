@@ -41,7 +41,7 @@ pages = {
         "color": "#6FA8DC",  # Green
     },
     "Light Industries": {
-        "file": "other_industry",
+        "file": "light_industries",
         "column": 2,  
         "pathway": "IEA NZE",
         "metrics": ["tCO2e","% zero carbon heat","% zero electrified heat" ],
