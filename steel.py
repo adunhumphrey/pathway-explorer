@@ -69,6 +69,7 @@ st.subheader(f"View and Filter {dataset_name}")
                
 # Load data preview (first 1000 rows only)
 file_path = "Steel.xlsx"
+milestone_image1 = 'steel_s1.png'
 remove_cols = []
 filter_columns = ["Scenario", "Metric", "Unit"]
 apply_year_filter = True
@@ -77,8 +78,12 @@ apply_year_filter = True
 df_preview = load_data_preview(file_path)
 df_preview.drop(columns=remove_cols,inplace=True)
 if df_preview is not None:
-    st.write("### Data Preview")
-    st.dataframe(df_preview.head(), hide_index=True)
+    #st.write("### Data Preview")
+    #st.dataframe(df_preview.head(), hide_index=True)
+
+    # Milestone Image 
+    st.write("### Key Milestone")
+    st.image(milestone_image1)
 
     # Load full data for filtering purposes (without limiting to preview rows)
     df_full = load_full_data(file_path,None,None)

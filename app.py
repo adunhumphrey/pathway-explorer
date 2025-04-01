@@ -354,6 +354,7 @@ html_code = f"""
 """
 
 
+
 # ✅ Content Section Below Cover
 if st.session_state.selected_page == "Home":
     # Render the HTML inside Streamlit
