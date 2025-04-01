@@ -70,6 +70,7 @@ st.subheader(f"View and Filter {dataset_name}")
                
 # Load data preview (first 1000 rows only)
 file_path = "buildings.xlsx"
+milestone_image1 = 'residential_s1.png'
 remove_cols = []
 filter_columns = ["Target type", "Scope / Emissions boundary",	"Unit", "Geography","Country", "Building type"]
 apply_year_filter = False
@@ -79,8 +80,12 @@ df_preview = load_data_preview(file_path)
 df_preview.drop(columns=remove_cols,inplace=True)
 df_preview = df_preview[df_preview['Building type'].str.contains("esidentia", case=False, na=False)]
 if df_preview is not None:
-    st.write("### Data Preview")
-    st.dataframe(df_preview.head(), hide_index=True)
+    #st.write("### Data Preview")
+    #st.dataframe(df_preview.head(), hide_index=True)
+
+    # Milestone Image 
+    st.write("### Key Milestone")
+    st.image(milestone_image1)
 
     # Load full data for filtering purposes (without limiting to preview rows)
     df_full = load_full_data(file_path,None,None)
