@@ -64,8 +64,6 @@ def to_excel(df):
         df.to_excel(writer, index=False)
     processed_data = output.getvalue()
     return processed_data
-    
-st.subheader(f"View and Filter {dataset_name}")
 
                
 # Load data preview (first 1000 rows only)
