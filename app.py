@@ -37,27 +37,27 @@ pages = {
         "file": "power_generation",
         "column": 1,  # First column
         "pathway": "IEA NZE, IPCC",
-        "metrics": ["tCO2e", "tCO2/MWh -% Zero Carbon Capacity"],
+        "metrics": ["tCO2e", "tCO2/MWh", "% Zero Carbon Capacity"],
         "color": "#6FA8DC",  # Green
     },
-    "Other Industries": {
+    "Light Industries": {
         "file": "other_industry",
         "column": 2,  
-        "pathway": "IEA NZE, IPCC",
-        "metrics": ["tCO2e", "tCO2/tonne"],
+        "pathway": "IEA NZE",
+        "metrics": ["tCO2e","% zero carbon heat","% zero electrified heat" ],
         "color": "#6FA8DC",  # Orange
     },
     "Pulp & Paper": {
         "file": "pulp_paper",
         "column": 3,  
-        "pathway": "IEA NZE, IPCC",
+        "pathway": "IEA NZE",
         "metrics": ["tCO2e", "tCO2/tonne"],
         "color": "#6FA8DC",  # Orange
     },
     "Oil & Gas": {
         "file": "oil_gas",
         "column": 1,
-        "pathway": "IPCC",
+        "pathway": "IEA NZE",
         "metrics": ["tCO2e", "tCO2e/boe"],
         "color": "#6FA8DC",  # Purple
     },
@@ -134,22 +134,22 @@ pages = {
     "Apperal & Footwear": {
         "file": "apparel_footwear",
         "column": 2,  # Third column
-        "pathway": "cross sector",
+        "pathway": "Cross Sector",
         "metrics": ["tCO2e", "tCO2/MWh"],
         "color": "#C27BA0",  # Pink
     },
     "Financial Institution": {
         "file": "financial_institution",
         "column": 3,  # Third column
-        "pathway": "cross sector",
+        "pathway": "IEA NZE, NGFS, OECM",
         "metrics": ["tCO2e", "tCO2/MWh"],
         "color": "#C27BA0",  # Pink
     },
-    "Other Sector": {
+    "Other Sectors": {
         "file": "other_sector",
         "column": 1,  # Third column
         "pathway": "",
-        "metrics": ["-","-"],
+        "metrics": ["tCO2e"],
         "color": "#C27BA0",  # Pink
     },
 }
