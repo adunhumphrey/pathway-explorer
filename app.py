@@ -37,14 +37,14 @@ pages = {
         "file": "power_generation",
         "column": 1,  # First column
         "pathway": "IEA NZE, IPCC",
-        "metrics": ["tCO2e", "tCO2/MWh", "% Zero Carbon Capacity"],
+        "metrics": ["tCO2e -tCO2/MWh", "% Zero Carbon Capacity"],
         "color": "#6FA8DC",  # Green
     },
     "Light Industries": {
         "file": "light_industries",
         "column": 2,  
         "pathway": "IEA NZE",
-        "metrics": ["tCO2e","% zero carbon heat","% zero electrified heat" ],
+        "metrics": ["tCO2e -% zero carbon heat","% zero electrified heat" ],
         "color": "#6FA8DC",  # Orange
     },
     "Pulp & Paper": {
@@ -149,7 +149,7 @@ pages = {
         "file": "other_sector",
         "column": 1,  # Third column
         "pathway": "",
-        "metrics": ["tCO2e"],
+        "metrics": ["tCO2e", "-"],
         "color": "#C27BA0",  # Pink
     },
 }
