@@ -70,7 +70,7 @@ def to_excel(df):
 file_path = "Aluminium.xlsx"
 milestone_image1 = 'aluminium_s1.png'
 remove_cols = []
-filter_columns = ["Scenario", "Region", "Variable", "Unit"]
+filter_columns = ["Scenario", "Metric", "Unit"]
 apply_year_filter = False
 
 #st.write(remove_cols)
@@ -193,9 +193,9 @@ if df_preview is not None:
             unit = df_combined["Unit"].unique()[0]
         else: unit='Unit (Mixed)'
 
-        if df_combined["Variable"].nunique()==1:
-            title_val = df_combined["Variable"].unique()[0]
-        else: title_val='Multiple Variables'
+        if df_combined["Metric"].nunique()==1:
+            title_val = df_combined["Metric"].unique()[0]
+        else: title_val='Multiple Metrics'
         
         
         # Plotly line chart with multiple lines for different models
