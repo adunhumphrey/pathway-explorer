@@ -110,7 +110,7 @@ st.markdown(
 )
 
 # Define tabs for multiple data sources
-tabs = st.tabs(["IPCC", "FINZ"])
+tabs = st.tabs(["IPCC", "Financial Institution"])
 
 
 # File paths and filter columns for different datasets
@@ -122,7 +122,7 @@ datasets_info = {
         "remove_columns": [],
         "apply_year_filter": True
     },
-    "FINZ": {
+    "Financial Institution": {
         "file_path": "FINZ.xlsx",
         "filter_columns": ["Model", "Scenario"],
         "remove_columns": [],
@@ -139,7 +139,7 @@ for idx, tab in enumerate(tabs):
     # Document Tab
 
     with tab:
-        if dataset_name not in ["Others","FINZ"]:
+        if dataset_name not in ["Others","Financial Institution"]:
             #st.subheader(f"View and Filter {dataset_name}")
             
             # Load data preview (first 1000 rows only)
