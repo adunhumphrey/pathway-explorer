@@ -66,8 +66,6 @@ def to_excel(df):
     processed_data = output.getvalue()
     return processed_data
     
-st.subheader(f"View and Filter {dataset_name}")
-
                
 # Load data preview (first 1000 rows only)
 file_path = "buildings.xlsx"
