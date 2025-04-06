@@ -68,6 +68,7 @@ def to_excel(df):
                
 # Load data preview (first 1000 rows only)
 file_path = "Oil & Gas.xlsx"
+milestone_image1 = 'oil_gas_s1.png'
 remove_cols = []
 filter_columns = ["Scenario", "Metric", "Unit"]
 apply_year_filter = False
@@ -76,8 +77,12 @@ apply_year_filter = False
 df_preview = load_data_preview(file_path)
 df_preview.drop(columns=remove_cols,inplace=True)
 if df_preview is not None:
-    st.write("### Data Preview")
-    st.dataframe(df_preview.head(), hide_index=True)
+    #st.write("### Data Preview")
+    #st.dataframe(df_preview.head(), hide_index=True)
+
+    # Milestone Image 
+    st.write("### Key Milestone for Power generation")
+    st.image(milestone_image1)
 
     # Load full data for filtering purposes (without limiting to preview rows)
     df_full = load_full_data(file_path,None,None)
@@ -156,55 +161,56 @@ if df_preview is not None:
         year_columns = [(col) for col in df_full.columns if str(col).isdigit()]
         year_columns = sorted(year_columns, key=int)
 
-        if dataset_name == "Oil & Gas":
-            #st.write("### Visualizing Data")
-            
-            df_model = df_full.copy()
-            df_model.fillna(0, inplace=True)
+        #if dataset_name == "Oil & Gas":
+        #st.write("### Visualizing Data")
+        
+        df_model = df_full.copy()
+        df_model.fillna(0, inplace=True)
 
-            # Ensure year columns are numeric
-            df_model[year_columns] = df_model[year_columns].apply(pd.to_numeric, errors='coerce')
+        # Ensure year columns are numeric
+        df_model[year_columns] = df_model[year_columns].apply(pd.to_numeric, errors='coerce')
 
-            # Reshape data from wide to long format
-            df_melted = df_model.melt(id_vars=filter_columns,
-                                    value_vars=year_columns, 
-                                    var_name="Year", value_name="Value")
-            
-            #df_melted = df_melted.groupby(['Metric','Year'])['Value'].median().reset_index()
-            # Convert Year column to integer
-            df_melted["Year"] = pd.to_numeric(df_melted["Year"], errors='coerce')
-            df_melted["Value"] = pd.to_numeric(df_melted["Value"], errors='coerce')
+        # Reshape data from wide to long format
+        df_melted = df_model.melt(id_vars=filter_columns,
+                                value_vars=year_columns, 
+                                var_name="Year", value_name="Value")
+        
+        #df_melted = df_melted.groupby(['Metric','Year'])['Value'].median().reset_index()
+        # Convert Year column to integer
+        df_melted["Year"] = pd.to_numeric(df_melted["Year"], errors='coerce')
+        df_melted["Value"] = pd.to_numeric(df_melted["Value"], errors='coerce')
 
-            median_values = df_melted.groupby('Year')['Value'].median().reset_index()
-            median_values['Scenario'] = 'Median'
+        median_values = df_melted.groupby('Year')['Value'].median().reset_index()
+        median_values['Scenario'] = 'Median'
 
-            # Combine the original data with the median data
-            df_combined = pd.concat([df_melted])
+        # Combine the original data with the median data
+        df_combined = pd.concat([df_melted])
 
-            df_combined.dropna(subset=["Value"], inplace=True)
-            df_combined = df_combined[df_combined['Value']!=0]
+        df_combined.dropna(subset=["Value"], inplace=True)
+        df_combined = df_combined[df_combined['Value']!=0]
 
-            if df_combined["Unit"].nunique()==1:
-                unit = df_combined["Unit"].unique()[0]
-            else: unit='Unit (Mixed)'
+        if df_combined["Unit"].nunique()==1:
+            unit = df_combined["Unit"].unique()[0]
+        else: unit='Unit (Mixed)'
 
-            if df_combined["Metric"].nunique()==1:
-                title_val = df_combined["Metric"].unique()[0]
-            else: title_val='Multiple Metrics'
-            
-            
+        if df_combined["Metric"].nunique()==1:
+            title_val = df_combined["Metric"].unique()[0]
+        else: title_val='Multiple Metrics'
+        
+        
 # Plotly line chart with multiple lines for different models
-            fig = px.line(df_combined, x="Year", y="Value", color="Scenario",
-                        title=f'"{title_val}" - Trend Comparison',
-                        labels={"Value": unit, "Year": "Year", "Scenario": "Scenario"},
-                        markers=True)  # Add markers to check if points are plotted
-            
-            fig.update_xaxes(type="linear",)
-            # Set chart height
-            fig.update_layout(height=600, width=1200)  # Adjust the height as needed (default is ~450)
-            if dataset_name!='Oil & Gas':
-                fig.update_traces(line=dict(color="black", width=4), selector=dict(name="Median"),)
 
-            st.plotly_chart(fig)          
+        fig = px.line(df_combined, x="Year", y="Value", color="Scenario",
+                    title=f'"{title_val}" - Trend Comparison',
+                    labels={"Value": unit, "Year": "Year", "Metric": "Metric"},
+                    markers=True)  # Add markers to check if points are plotted
+        
+        fig.update_xaxes(type="linear",)
+        # Set chart height
+        fig.update_layout(height=600, width=1200)  # Adjust the height as needed (default is ~450)
+        if dataset_name!='Oil & Gas':
+            fig.update_traces(line=dict(color="black", width=4), selector=dict(name="Median"),)
 
-            
+        st.plotly_chart(fig)          
+
+        
