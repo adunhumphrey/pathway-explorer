@@ -153,9 +153,6 @@ for idx, tab in enumerate(tabs):
                             #st.write("### Data Preview")
                 #st.dataframe(df_preview.head(), hide_index=True)
 
-                # Milestone Image 
-                st.write(f"### Key Milestone for {dataset_name}")
-                st.image(milestone_image)
 
                 # Load full data for filtering purposes (without limiting to preview rows)
                 df_full = load_full_data(file_path,None,None)
