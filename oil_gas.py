@@ -81,7 +81,7 @@ if df_preview is not None:
     #st.dataframe(df_preview.head(), hide_index=True)
 
     # Milestone Image 
-    st.write("### Key Milestone for Power generation")
+    st.write("### Key Milestone for Oil and Gas Sector")
     st.image(milestone_image1)
 
     # Load full data for filtering purposes (without limiting to preview rows)
