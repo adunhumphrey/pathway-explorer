@@ -117,7 +117,8 @@ tabs = st.tabs(["IPCC", "FINZ"])
 datasets_info = {
     "IPCC": {
         "file_path": "C1-3_summary_2050_variable.csv",
-        "filter_columns": ["Category", "Model", "Scenario", "Region", "Variable",'Unit'],
+#        "filter_columns": ["Category", "Model", "Scenario", "Region", "Variable",'Unit'],
+        "filter_columns": ["Category", "Scenario", "Metric",'Unit'],
         "remove_columns": [],
         "apply_year_filter": True
     },
@@ -139,7 +140,7 @@ for idx, tab in enumerate(tabs):
 
     with tab:
         if dataset_name not in ["Others","FINZ"]:
-            st.subheader(f"View and Filter {dataset_name}")
+            #st.subheader(f"View and Filter {dataset_name}")
             
             # Load data preview (first 1000 rows only)
             file_path = dataset_info["file_path"]
@@ -147,9 +148,14 @@ for idx, tab in enumerate(tabs):
             #st.write(remove_cols)
             df_preview = load_data_preview(file_path)
             df_preview.drop(columns=remove_cols,inplace=True)
+            milestone_image = 'oil_gas_s1.png'
             if df_preview is not None:
-                st.write("### Data Preview")
-                st.dataframe(df_preview.head(), hide_index=True)
+                            #st.write("### Data Preview")
+                #st.dataframe(df_preview.head(), hide_index=True)
+
+                # Milestone Image 
+                st.write(f"### Key Milestone for {dataset_name}")
+                st.image(milestone_image)
 
                 # Load full data for filtering purposes (without limiting to preview rows)
                 df_full = load_full_data(file_path,None,None)
@@ -265,9 +271,9 @@ for idx, tab in enumerate(tabs):
                             unit = df_combined["Unit"].unique()[0]
                         else: unit='Unit (Mixed)'
 
-                        if df_combined["Variable"].nunique()==1:
-                            title_val = df_combined["Variable"].unique()[0]
-                        else: title_val='Multiple Variables'
+                        if df_combined["Metric"].nunique()==1:
+                            title_val = df_combined["Metric"].unique()[0]
+                        else: title_val='Multiple Metric'
                         
                         
                         # Plotly line chart with multiple lines for different models
@@ -482,7 +488,7 @@ for idx, tab in enumerate(tabs):
             datasets_info2 = {
                 "FINZ-1": {
                     "file_path": "FINZ.xlsx",
-                    "filter_columns": ["Variable", "scen_id"],
+                    "filter_columns": ["Scenario","Metric","Unit"],
                     "remove_columns": [],
                     "apply_year_filter": False
                 },
@@ -493,6 +499,7 @@ for idx, tab in enumerate(tabs):
                     "apply_year_filter": False
                 } }
             tab2 = st.tabs(["FINZ-1", "FINZ-2"])
+            milestone_image1 = 'finz1_s1.png'
             # Iterate over each tab and display corresponding data
             for idx, tab in enumerate(tab2):
                 dataset_name = list(datasets_info2.keys())[idx]
@@ -502,8 +509,12 @@ for idx, tab in enumerate(tabs):
                         file_path = dataset_info2["file_path"]
                         remove_cols = dataset_info2['remove_columns']
                         df = pd.read_excel(file_path,sheet_name='FINZ_NGFS')
-                        st.write("### Data Preview")
-                        st.dataframe(df.head(), hide_index=True)
+                        #st.write("### Data Preview")
+                        #st.dataframe(df_preview.head(), hide_index=True)
+
+                        # Milestone Image 
+                        st.write(f"### Key Milestone for {dataset_name}")
+                        st.image(milestone_image1)
                         col1, col2 = st.columns([1, 5])
                         categorical_columns = dataset_info2["filter_columns"]
                         # Identify year columns (assuming they are numeric)
@@ -587,11 +598,11 @@ for idx, tab in enumerate(tabs):
                             df[year_columns] = df[year_columns].apply(pd.to_numeric, errors='coerce')
 
                             # Reshape data from wide to long format
-                            df_melted = df.melt(id_vars=["scen_id", "Model" ,"Scenario", "Region", "Variable", "Unit"], 
+                            df_melted = df.melt(id_vars=filter_columns, 
                                                     value_vars=year_columns, 
                                                     var_name="Year", value_name="Value")
                             
-                            #df_melted = df_melted.groupby(['Variable','Region','Year'])['Value'].median().reset_index()
+                            #df_melted = df_melted.groupby(['Metric','Region','Year'])['Value'].median().reset_index()
                             # Convert Year column to integer
                             df_melted["Year"] = pd.to_numeric(df_melted["Year"], errors='coerce')
                             df_melted["Value"] = pd.to_numeric(df_melted["Value"], errors='coerce')
@@ -604,14 +615,14 @@ for idx, tab in enumerate(tabs):
                             if df_melted["Unit"].nunique()==1:
                                 unit = df_melted["Unit"].unique()[0]
                             else: unit='Unit (Mixed)'
-                            if df_melted["Variable"].nunique()==1:
-                                title_val = df_melted["Variable"].unique()[0]
-                            else: title_val='Multiple Variables'
+                            if df_melted["Metric"].nunique()==1:
+                                title_val = df_melted["Metric"].unique()[0]
+                            else: title_val='Multiple Metric'
                             
                             # Plotly line chart with multiple lines for different models
-                            fig = px.line(df_melted, x="Year", y="Value", color='scen_id',
+                            fig = px.line(df_melted, x="Year", y="Value", color='Scenario',
                                         title=f'"{title_val}" - Trend Comparison',
-                                        labels={"Value": unit, "Year": "Year", "scen_id": "scen_id"},
+                                        labels={"Value": unit, "Year": "Year", "Scenario": "Scenario"},
                                         markers=True)  # Add markers to check if points are plotted
                             
                             fig.update_xaxes(type="linear",)
@@ -624,10 +635,15 @@ for idx, tab in enumerate(tabs):
                     else:  #dataset_name=="FINZ-1":
                         
                         file_path = dataset_info2["file_path"]
+                        milestone_image2 = 'finz1_s1.png'
                         remove_cols = dataset_info2['remove_columns']
                         df = pd.read_excel(file_path,sheet_name='FINZ_OECM')
-                        st.write("### Data Preview")
-                        st.dataframe(df.head(), hide_index=True)
+                        #st.write("### Data Preview")
+                        #st.dataframe(df_preview.head(), hide_index=True)
+
+                        # Milestone Image 
+                        st.write(f"### Key Milestone for {dataset_name}")
+                        st.image(milestone_image2)
                         col1, col2 = st.columns([1, 5])
                         categorical_columns = dataset_info2["filter_columns"]
                         # Identify year columns (assuming they are numeric)

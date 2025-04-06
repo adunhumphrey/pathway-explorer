@@ -3,7 +3,7 @@ import pandas as pd
 from io import BytesIO
 import plotly.express as px
 
-
+dataset_name = "FLAG"
 
 # Function to load data preview (first 100 rows)
 @st.cache_data
@@ -163,35 +163,37 @@ if df_preview is not None:
         year_columns = [(col) for col in df_full.columns if str(col).isdigit()]
         year_columns = sorted(year_columns, key=int)
 
-        if dataset_name == "FLAG":
-            #st.write("### Visualizing Data")
-            # Calculate the median line across all years
-            #print(df_full.columns)
-            df_full = df_full[~df_full.apply(lambda row: row.astype(str).str.contains('Median').any(), axis=1)]
 
-            df_melted = df_full.melt(id_vars=filter_columns, 
-                                value_vars=[(year) for year in range(2030, 2055, 5)], 
-                                var_name="Year", value_name="Value")
-            
-            
-            if df_melted["Commodity"].nunique()==1:
+        #st.write("### Visualizing Data")
+        # Calculate the median line across all years
+        #print(df_full.columns)
+        df_full = df_full[~df_full.apply(lambda row: row.astype(str).str.contains('Median').any(), axis=1)]
 
-                if df_melted["Unit"].nunique()==1:
-                    unit = df_melted["Unit"].unique()[0]
-                    metric_name = df_melted["Commodity"].unique()[0]
-                else: 
-                    unit='Unit (Mixed)'
-                    metric_name = "Multiple Region"
-                # Plot the line chart
-                fig = px.line(df_melted, x="Year", y="Value", color="Region", 
-                            title= metric_name, 
-                            labels={"Value": unit, "Year": "Year", "Region": "Region"},
-                            markers=True)
+        df_melted = df_full.melt(id_vars=filter_columns, 
+                            value_vars=[(year) for year in range(2030, 2055, 5)], 
+                            var_name="Year", value_name="Value")
+        
+        
+        if df_melted["Commodity"].nunique()==1:
 
-                # Set the line styles for median and other models
-                fig.update_traces(line=dict(color="grey"), selector=dict(name="Region"))
+            if df_melted["Unit"].nunique()==1:
+                unit = df_melted["Unit"].unique()[0]
+                metric_name = df_melted["Commodity"].unique()[0]
+            else: 
+                unit='Unit (Mixed)'
+                metric_name = "Multiple Region"
+            # Plot the line chart
+            fig = px.line(df_melted, x="Year", y="Value", color="Region", 
+                        title= metric_name, 
+                        labels={"Value": unit, "Year": "Year", "Region": "Region"},
+                        markers=True)
 
-                # Set chart height
-                fig.update_layout(height=600, width=1200)  # Adjust the height as needed (default is ~450)
-                # Display the plot in Streamlit
-                st.plotly_chart(fig)
+            # Set the line styles for median and other models
+            fig.update_traces(line=dict(color="grey"), selector=dict(name="Region"))
+
+            # Set chart height
+            fig.update_layout(height=600, width=1200)  # Adjust the height as needed (default is ~450)
+            # Display the plot in Streamlit
+            st.plotly_chart(fig)
+        else:
+            st.write("You have Multiple Commodities, please select one to view the Chart!")

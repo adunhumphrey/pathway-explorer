@@ -401,65 +401,7 @@ if st.session_state.selected_page == "Home":
             )
 
 elif st.session_state.selected_page == "Reference":
-    # Streamlit UI
-    # Display logo and title
-    col1, col2 = st.columns([0.15, 0.85])  # Left for image, right for title
-    with col1:
-        st.image("SBT_Logo.png", width=300)  # Adjust width as needed
-
-    with col2:
-        st.markdown(
-            """
-            <style>
-            /* Tooltip styling for title */
-            .title-tooltip {
-                position: relative;
-                display: inline-block;
-                cursor: pointer;
-            }
-
-            /* Tooltip text */
-            .title-tooltip:hover::after {
-                content: attr(data-tooltip);
-                position: absolute;
-                bottom: 100%;
-                left: 50%;
-                transform: translateX(-50%);
-                background-color: rgba(0, 0, 0, 0.7); /* Dark background for the tooltip */
-                color: white;
-                padding: 5px;
-                border-radius: 5px;
-                font-size: 12px;
-                white-space: nowrap;
-                z-index: 1;  /* Ensure tooltip is above */
-                opacity: 1;
-                transition: opacity 0.3s;
-            }
-            </style>
-            """,
-            unsafe_allow_html=True
-        )
-        # Add the title with a tooltip
-        st.markdown(
-            """
-            <style>
-            .title-tooltip {
-                position: relative;
-                top: 10px;   /* Moves the text down */
-                color: #8B008B;
-                left: 280px; /* Moves the text to the right */
-                text-align: left;  /* Aligns the text to the right */
-            }
-            </style>
-            <div class="title-tooltip" data-tooltip="Explore various pathways for climate action">
-                <span style="font-size: 50px; font-weight: bold;">Pathway Explorer</span>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-    st.write("Here you can find all the raw data, eligible scenarios and pathways that informs the cross sector and sector-specific standards in the SBTi")
-
+    
     st.markdown(
         """
         <style>
@@ -503,13 +445,14 @@ elif st.session_state.selected_page == "Reference":
     datasets_info = {
         "Document": {
             "file_path": "Alldata.xlsx",
-            "filter_columns": ["Model", "Scenario", "Region", "Variable"],
+#            "filter_columns": ["Model", "Scenario", "Region", "Variable"],
+            "filter_columns": ["Scenario","Variable"],
             "remove_columns": [],
             "apply_year_filter": False
         },
         "Criteria": {
             "file_path": "Phase-Out.xlsx",
-            "filter_columns": ["Model", "Scenario", "Region", "Variable"],
+            "filter_columns": [],
             "remove_columns": [],
             "apply_year_filter": False
         },
@@ -540,7 +483,7 @@ elif st.session_state.selected_page == "Reference":
                 file_path = dataset_info["file_path"]
 
                 df = load_full_data(file_path,None,None)
-
+                df.rename(columns={'Metric':'Variable'}, inplace=True)
                 # Drop integer and float columns, keeping only categorical columns
                 #categorical_columns = df.select_dtypes(exclude=['int64', 'float64']).columns
 
@@ -585,7 +528,7 @@ elif st.session_state.selected_page == "Reference":
 
                 file_path = dataset_info["file_path"]
                 remove_cols = dataset_info['remove_columns']
-                df = load_full_data(file_path,None, None)
+                df = load_full_data(file_path,'criteria', None)
                 st.write('This sheet shows the phase out dates for some fossil commodities')
                 st.write('Disclaimer: The sector-specific requirements for key economic activities are derived from specific scenarios e.g IEA to provide additional guidelines on how activities need to transition at interim period on the way to net zero. The activity specific milestones are not available in all IPCC scenarios and there may be wide variations across  IPCC models. Therefore, the granularity that IEA provides for these indicators are useful, even though they may not align with the assumptions from the overall IPCC scenarios.')
                 st.dataframe(df, hide_index=True)
