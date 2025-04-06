@@ -148,7 +148,7 @@ for idx, tab in enumerate(tabs):
             #st.write(remove_cols)
             df_preview = load_data_preview(file_path)
             df_preview.drop(columns=remove_cols,inplace=True)
-            milestone_image = ''
+            milestone_image = 'oil_gas_s1.png'
             if df_preview is not None:
                             #st.write("### Data Preview")
                 #st.dataframe(df_preview.head(), hide_index=True)
