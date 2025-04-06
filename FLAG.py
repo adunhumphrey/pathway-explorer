@@ -70,7 +70,7 @@ def to_excel(df):
                
 # Load data preview (first 1000 rows only)
 file_path = "FLAG.xlsx"
-milestone_image1 = 'commercial_s1.png'
+milestone_image1 = 'flag_sector_s1.png'
 remove_cols = []
 filter_columns = ["Commodity", "Region", "Unit"]
 apply_year_filter = False
