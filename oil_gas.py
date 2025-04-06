@@ -64,12 +64,10 @@ def to_excel(df):
     processed_data = output.getvalue()
     return processed_data
     
-st.subheader(f"View and Filter {dataset_name}")
 
                
 # Load data preview (first 1000 rows only)
 file_path = "Oil & Gas.xlsx"
-milestone_image1 = 'oil_gas_s1.png'
 remove_cols = []
 filter_columns = ["Scenario", "Metric", "Unit"]
 apply_year_filter = False
@@ -78,12 +76,8 @@ apply_year_filter = False
 df_preview = load_data_preview(file_path)
 df_preview.drop(columns=remove_cols,inplace=True)
 if df_preview is not None:
-    #st.write("### Data Preview")
-    #st.dataframe(df_preview.head(), hide_index=True)
-
-    # Milestone Image 
-    st.write("### Key Milestone")
-    st.image(milestone_image1)
+    st.write("### Data Preview")
+    st.dataframe(df_preview.head(), hide_index=True)
 
     # Load full data for filtering purposes (without limiting to preview rows)
     df_full = load_full_data(file_path,None,None)
@@ -202,7 +196,7 @@ if df_preview is not None:
 # Plotly line chart with multiple lines for different models
             fig = px.line(df_combined, x="Year", y="Value", color="Scenario",
                         title=f'"{title_val}" - Trend Comparison',
-                        labels={"Value": unit, "Year": "Year", "Metric": "Metric"},
+                        labels={"Value": unit, "Year": "Year", "Scenario": "Scenario"},
                         markers=True)  # Add markers to check if points are plotted
             
             fig.update_xaxes(type="linear",)
