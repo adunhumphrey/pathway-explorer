@@ -483,7 +483,7 @@ for idx, tab in enumerate(tabs):
 
                             # Display chart in Streamlit
                             st.plotly_chart(fig, use_container_width=True)
-        elif dataset_name == "FINZ" :
+        elif dataset_name == "Financial Institution" :
             # File paths and filter columns for different datasets
             datasets_info2 = {
                 "NGFS": {
