@@ -78,7 +78,7 @@ pages = {
     "Residential": {
         "file": "residential",
         "column": 1,  
-        "pathway": "CREEM",
+        "pathway": "CRREM",
         "metrics": ["tCO2e", "tCO2/m2"],
         "color": "#D77932",  # Purple
     },
@@ -99,7 +99,7 @@ pages = {
     "Commercial": {
         "file": "commercial",
         "column": 1,  # Third column
-        "pathway": "CREEM",
+        "pathway": "CRREM",
         "metrics": ["tCO2e", "tCO2/m2"],
         "color": "#D77932",  # Pink
     },
@@ -131,7 +131,7 @@ pages = {
         "metrics": ["tCO2e", "tCO2/m3 -tCO2/freshweight"],
         "color": "#D77932",  # Pink
     },
-    "Apperal & Footwear": {
+    "Apparel & Footwear": {
         "file": "apparel_footwear",
         "column": 2,  # Third column
         "pathway": "Cross Sector",
