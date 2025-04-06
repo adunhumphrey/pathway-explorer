@@ -486,26 +486,26 @@ for idx, tab in enumerate(tabs):
         elif dataset_name == "FINZ" :
             # File paths and filter columns for different datasets
             datasets_info2 = {
-                "FINZ-1": {
+                "NGFS": {
                     "file_path": "FINZ.xlsx",
                     "filter_columns": ["Scenario","Metric","Unit"],
                     "remove_columns": [],
                     "apply_year_filter": False
                 },
-                    "FINZ-2": {
+                    "OECM": {
                     "file_path": "FINZ.xlsx",
                     "filter_columns": ["Variable", "Region"],
                     "remove_columns": [],
                     "apply_year_filter": False
                 } }
-            tab2 = st.tabs(["FINZ-1", "FINZ-2"])
+            tab2 = st.tabs(["NGFS", "OECM"])
             milestone_image1 = 'finz1_s1.png'
             # Iterate over each tab and display corresponding data
             for idx, tab in enumerate(tab2):
                 dataset_name = list(datasets_info2.keys())[idx]
                 dataset_info2 = datasets_info2[dataset_name]
                 with tab:
-                    if dataset_name=="FINZ-1":
+                    if dataset_name=="NGFS":
                         file_path = dataset_info2["file_path"]
                         remove_cols = dataset_info2['remove_columns']
                         df = pd.read_excel(file_path,sheet_name='FINZ_NGFS')
@@ -632,7 +632,7 @@ for idx, tab in enumerate(tabs):
                             # Display chart in Streamlit
                             st.plotly_chart(fig, use_container_width=True)
                     
-                    else:  #dataset_name=="FINZ-1":
+                    else:  #dataset_name=="NGFS":
                         
                         file_path = dataset_info2["file_path"]
                         milestone_image2 = 'finz1_s1.png'
