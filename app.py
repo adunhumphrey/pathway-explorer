@@ -131,7 +131,7 @@ pages = {
         "metrics": ["tCO2e", "tCO2/m3 -tCO2/freshweight"],
         "color": "#D77932",  # Pink
     },
-    "Apparel & Footwear": {
+    "Apperal & Footwear": {
         "file": "apparel_footwear",
         "column": 2,  # Third column
         "pathway": "Cross Sector",
