@@ -642,7 +642,7 @@ for idx, tab in enumerate(tabs):
                         #st.dataframe(df_preview.head(), hide_index=True)
 
                         # Milestone Image 
-                        st.write(f"### Key Milestone for {dataset_name}")
+                        st.write(f"### Key Milestone for Financial Institution")
                         st.image(milestone_image2)
                         col1, col2 = st.columns([1, 5])
                         categorical_columns = dataset_info2["filter_columns"]
