@@ -35,9 +35,7 @@ def load_full_data(file_path,sheet, skip_row):
 pages = {
     "Power Generation": {
         "file": "power_generation",
-        "column": 1,  # First column
-        "pathway": "IEA NZE, IPCC",
-        "metrics": ["tCO2e -tCO2/MWh", "% Zero Carbon Capacity"],
+        "column": 1,  # First column,
         "color": "#6FA8DC",  # Green
     },
     "Light Industries": {
