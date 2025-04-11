@@ -36,8 +36,8 @@ pages = {
     "Power Generation": {
         "file": "power_generation",
         "column": 1,  # First column
-        "pathway": " ",
-        "metrics": [" "],
+        "pathway": "IEA NZE, IPCC",
+        "metrics": ["tCO2e -tCO2/MWh", "% Zero Carbon Capacity"],
         "color": "#6FA8DC",  # Green
     },
     "Light Industries": {
