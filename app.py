@@ -6,10 +6,10 @@ import os
 import base64
 import docx
 from io import BytesIO
-from io import BytesIO
 from streamlit import session_state as ss
 import plotly.express as px
 from streamlit_pdf_viewer import pdf_viewer
+
 
 # Function to load full dataset
 @st.cache_data
@@ -156,25 +156,17 @@ pages = {
 
 # ✅ Set page config
 st.set_page_config(page_title="Pathway Explorer", layout="wide")
-st.markdown(
-"""
-<style>
-.css-1jc7ptx, .e1ewe7hr3, .viewerBadge_container__1QSob,
-.styles_viewerBadge__1yB5_, .viewerBadge_link__1S137,
-.viewerBadge_text__1JaDK {
-display: none;
-}
-</style>
-""",
-unsafe_allow_html=True
-)
+
 # ✅ Get the selected page from URL reference (if exists)
 query_params = st.query_params
 selected_page = query_params.get("selected_page", None)
 
+
 # ✅ Initialize session state for navigation
 if "selected_page" not in st.session_state:
     st.session_state.selected_page = selected_page if selected_page else "Home"
+
+
 
 # ✅ Navigation function using `st.query_params`
 def navigate(page):
@@ -260,7 +252,7 @@ st.markdown(
         position: relative;
         width: 100%;
         height: 350px; /* Adjust height as needed */
-        background: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.3)), 
+        background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6)), 
                     url("{background_image}") no-repeat center center;
         background-size: cover;
         display: flex;
@@ -306,9 +298,9 @@ import streamlit.components.v1 as components
 
 # List of text messages
 messages = [
-    "<span style='font-size: 32px; font-weight: bold;font-family: Montserrat';'>What is the Goal?</span><br> <span style='font-size: 17px; font-weight: 100;'>The Pathway Explorer provides emission scenarios, sectoral pathways, relevant metrics, and interim benchmarks that align with the Paris Agreement’s 1.5°C goal. It offers detailed insights across key sectors, including power, light and heavy industry, buildings, transport, and FLAG (Forestry, Land Use and Agriculture). </span>",
-    "<span style='font-size: 32px; font-weight: bold;'>How is it Designed?</span><br><span style='font-size: 17px; font-weight: 100;'>The Pathway Explorer contains scenarios that pass the SBTi's six updated principles, which ensure that pathways meet the highest standards of ambition, responsibility, scientific rigor, actionability, robustness, and transparency. These principles guide the selection of 1.5°C-aligned pathways for credible decarbonization planning </span>",
-    "<span style='font-size: 32px; font-weight: bold;'>Why it Matters?</span><br><span style='font-size: 17px; font-weight: 100;'>In a crowded landscape of climate scenarios, the Explorer offers transparent, science-based benchmarks aligned with robust principles — helping close the ambition-to-action gap. </span>",
+    "<span style='font-size: 32px; font-weight: bold;font-family: Source Sans Pro,san-serif';'>What is the Goal?</span><br> <span style='font-size: 17px; font-weight: 100;'>The Pathway Explorer provides emission scenarios, sectoral pathways, relevant metrics, and interim benchmarks that align with the Paris Agreement’s 1.5°C goal. It offers detailed insights across key sectors, including power, light and heavy industry, buildings, transport, and FLAG (Forestry, Land Use and Agriculture). </span>",
+    "<span style='font-size: 32px; font-weight: bold;font-family: Source Sans Pro,san-serif'>How is it Designed?</span><br><span style='font-size: 17px; font-weight: 100;'>The Pathway Explorer contains scenarios that pass the SBTi's six updated principles, which ensure that pathways meet the highest standards of ambition, responsibility, scientific rigor, actionability, robustness, and transparency. These principles guide the selection of 1.5°C-aligned pathways for credible decarbonization planning </span>",
+    "<span style='font-size: 32px; font-weight: bold;font-family: Source Sans Pro,san-serif'>Why it Matters?</span><br><span style='font-size: 17px; font-weight: 100;'>In a crowded landscape of climate scenarios, the Explorer offers transparent, science-based benchmarks aligned with robust principles — helping close the ambition-to-action gap. </span>",
     ]
 
 # JavaScript-friendly format (convert Python list to JSON string)
@@ -327,6 +319,7 @@ html_code = f"""
             padding: 10px;
             transition: opacity 0.5s;
             line-height: 1.5;
+            font-family:"Source Sans Pro","san-serif" !important;
         }}
     </style>
 </head>
@@ -365,9 +358,37 @@ html_code = f"""
 """
 
 
+#LOGGING MCHANISM HR
+# --- Basic Authentication ---
+USER_CREDENTIALS = {
+    "humphrey": "password123@",
+    "eoin": "E1on12@",
+}
 
 # ✅ Content Section Below Cover
 if st.session_state.selected_page == "Home":
+
+    if "authenticated" not in st.session_state:
+        st.session_state["authenticated"] = False
+
+    def login():
+        st.title("Login to Access the Dashboard")
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
+        if st.button("Login"):
+            if username in USER_CREDENTIALS and USER_CREDENTIALS[username] == password:
+                st.session_state["authenticated"] = True
+                st.success("Login successful!")
+                st.rerun()
+            else:
+               st.error("Invalid username or password!")
+
+    if not st.session_state["authenticated"]:
+        login()
+        st.stop()
+
+
+
     # Render the HTML inside Streamlit
     components.html(html_code, height=150)  # Increased height for better visibility
     #st.markdown('<div class="content-wrapper">', unsafe_allow_html=True)
@@ -557,6 +578,7 @@ elif st.session_state.selected_page == "Reference":
                 st.dataframe(df, hide_index=True)
             else:
                 st.error("Error loading data preview.")
+
 elif st.session_state.selected_page == "Document":
  # Redirect to document page
         st.title("PDF Viewer")
@@ -580,7 +602,8 @@ elif st.session_state.selected_page == "Document":
                             data=ss.pdf_ref, 
                             file_name="sample.pdf", 
                             mime="application/pdf")
-            
+
+
 # ✅ Handle Page Navigation and Load Content
 else:
     module_name = pages.get(st.session_state.selected_page, {}).get("file")
@@ -591,3 +614,7 @@ else:
             spec.loader.exec_module(module)  
         except Exception as e:
             st.error(f"⚠️ Error loading {module_name}: {e}")
+
+if st.button("Logout"):
+    st.session_state["authenticated"] = False
+    st.rerun()
