@@ -66,7 +66,7 @@ pages = {
         "column": 2,  # Second column
         "pathway": "IEA NZE",
         "metrics": ["tCO2e", "tCO2/tonne.km"],
-        "color": "#0D2453",  # NAVY BLUE
+        "color": "#D77932",  # Brown
     },
     "Aluminum Production": {
         "file": "aluminum_production",
@@ -232,62 +232,25 @@ with col4:
 
 #    with col2:
 #        st.title(st.session_state.selected_page)
-    # Function to encode image to base64
+import base64
+
+# Function to encode image to base64
 def get_base64_image(image_path):
     with open(image_path, "rb") as image_file:
         encoded = base64.b64encode(image_file.read()).decode()
-        return f"data:image/png;base64,{encoded}"  # Change format if needed (png, jpg, etc.)
+    return f"data:image/png;base64,{encoded}"  # Change format if needed (png, jpg, etc.)
 
+# Get the base64 image
+background_image = get_base64_image("background.jpg")  # Replace with your local file name
+logo_image = get_base64_image("SBT_Logo.png")  # Ensure logo remains visible
 
-
-#LOGGING MCHANISM HR
-# --- Basic Authentication ---
-USER_CREDENTIALS = {
-    "humphrey": "password123@",
-    "eoin": "E1on12@",
-}
-
-# ✅ Content Section Below Cover
-if st.session_state.selected_page == "Home":
-
-    if "authenticated" not in st.session_state:
-        st.session_state["authenticated"] = False
-
-    def login():
-        st.title("Login")
-        username = st.text_input("Username")
-        password = st.text_input("Password", type="password")
-        if st.button("Login"):
-            if username in USER_CREDENTIALS and USER_CREDENTIALS[username] == password:
-                st.session_state["authenticated"] = True
-                st.success("Login successful!")
-                st.rerun()
-            else:
-               st.error("Invalid username or password!")
-
-    if not st.session_state["authenticated"]:
-        login()
-        st.stop()
-
-    # HEADER LINES REMOVED FROM HERE
-
-    import base64
-
-    # Get the base64 image
-    background_image = get_base64_image("background.jpg")  # Replace with your local file name
-    logo_image = get_base64_image("SBT_Logo.png")  # Ensure logo remains visible
-    # Inject CSS for the background image with the existing logo size & position
-    
-    st.markdown(
+# Inject CSS for the background image with the existing logo size & position
+st.markdown(
     f"""
     <style>
-    body{{
-        font-family:'Source Sans 3','Source Sans Pro' !important;
-    }}
     .cover-container {{
         position: relative;
         width: 100%;
-        border-radius:20px;
         height: 350px; /* Adjust height as needed */
         background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6)), 
                     url("{background_image}") no-repeat center center;
@@ -305,16 +268,13 @@ if st.session_state.selected_page == "Home":
         gap: 50px; /* Space between logo and title */
         background: rgba(0, 0, 0, 0); /* Semi-transparent background */
         padding: 20px;
-        border-radius: 20px !important;
+        border-radius: 10px;
     }}
 
     .title {{
         color: #8B008B;
         font-size: 50px;
         font-weight: bold;
-        font-family: 'Source Sans 3','Source Sans Pro',san-serif !important';
-        text-align:center;
-
     }}
     </style>
     """,
@@ -322,7 +282,7 @@ if st.session_state.selected_page == "Home":
 )
 
 # ✅ Cover Image Section with Logo & Title
-    st.markdown(
+st.markdown(
     f"""
     <div class="cover-container">
         <div class="overlay">
@@ -333,81 +293,99 @@ if st.session_state.selected_page == "Home":
     """,
     unsafe_allow_html=True
 )
-    
-    import streamlit as st
-    import streamlit.components.v1 as components
+import streamlit as st
+import streamlit.components.v1 as components
 
-    #List of text messages
-    messages = [
-    "<span style='font-size: 32px; font-weight: bold;font-family: Source Sans 3, Source Sans Pro, sans serif !important'>What is the Goal?</span><br> <span style='font-size: 17px; font-weight: 100;font-family: Source Sans Pro,san-serif !important'>The Pathway Explorer provides emission scenarios, sectoral pathways, relevant metrics, and interim benchmarks that align with the Paris Agreement’s 1.5°C goal. It offers detailed insights across key sectors, including power, light and heavy industry, buildings, transport, and FLAG (Forestry, Land Use and Agriculture). </span>",
-    "<span style='font-size: 32px; font-weight: bold;font-family: Source Sans 3, Source Sans Pro, sans serif important'>How is it Designed?</span><br><span style='font-size: 17px; font-weight: 100;font-family: Source Sans Pro,san-serif !important'>The Pathway Explorer contains scenarios that pass the SBTi's six updated principles, which ensure that pathways meet the highest standards of ambition, responsibility, scientific rigor, actionability, robustness, and transparency. These principles guide the selection of 1.5°C-aligned pathways for credible decarbonization planning </span>",
-    "<span style='font-size: 32px; font-weight: bold;font-family: Source Sans 3, Source Sans Pro, sans serif !important'>Why it Matters?</span><br><span style='font-size: 17px; font-weight: 100;font-family: Source Sans Pro,san-serif !important''>In a crowded landscape of climate scenarios, the Explorer offers transparent, science-based benchmarks aligned with robust principles — helping close the ambition-to-action gap. </span>",
+# List of text messages
+messages = [
+    "<span style='font-size: 32px; font-weight: bold;font-family: Source Sans Pro,san-serif';'>What is the Goal?</span><br> <span style='font-size: 17px; font-weight: 100;'>The Pathway Explorer provides emission scenarios, sectoral pathways, relevant metrics, and interim benchmarks that align with the Paris Agreement’s 1.5°C goal. It offers detailed insights across key sectors, including power, light and heavy industry, buildings, transport, and FLAG (Forestry, Land Use and Agriculture). </span>",
+    "<span style='font-size: 32px; font-weight: bold;font-family: Source Sans Pro,san-serif'>How is it Designed?</span><br><span style='font-size: 17px; font-weight: 100;'>The Pathway Explorer contains scenarios that pass the SBTi's six updated principles, which ensure that pathways meet the highest standards of ambition, responsibility, scientific rigor, actionability, robustness, and transparency. These principles guide the selection of 1.5°C-aligned pathways for credible decarbonization planning </span>",
+    "<span style='font-size: 32px; font-weight: bold;font-family: Source Sans Pro,san-serif'>Why it Matters?</span><br><span style='font-size: 17px; font-weight: 100;'>In a crowded landscape of climate scenarios, the Explorer offers transparent, science-based benchmarks aligned with robust principles — helping close the ambition-to-action gap. </span>",
     ]
 
-    # JavaScript-friendly format (convert Python list to JSON string)
-    import json
-    messages_js = json.dumps(messages)
+# JavaScript-friendly format (convert Python list to JSON string)
+import json
+messages_js = json.dumps(messages)
 
-    # JavaScript & HTML for the text slider
-    html_code = f"""
-    <!DOCTYPE html>
-    <html>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Geist:wght@100..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
-    <head>
-        <style>
-        body{{
+# JavaScript & HTML for the text slider
+html_code = f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        #slider-text {{
+            font-size: 24px;
+            text-align: center;
+            padding: 10px;
+            transition: opacity 0.5s;
+            line-height: 1.5;
+            font-family:"Source Sans Pro","san-serif" !important;
+        }}
+    </style>
+</head>
+<body>
 
-            font-family: 'Source+Sans+3' !important
+    <div id="slider-text">{messages[0]}</div>
 
-            }}
+    <script>
+        var messages = {messages_js};  // Messages from Python
+        var index = 0;
+        var interval = setInterval(slideText, 3000);  // Change text every 1 sec
 
-            #slider-text {{
-                font-size: 24px;
-                text-align: center;
-                padding: 10px;
-                transition: opacity 0.5s;
-                line-height: 1.5;
-                font-family:"Source+Sans+3",Source Sans Pro,san-serif !important;
-            }}
-        </style>
-    </head>
-    <body>
+        function slideText() {{
+            var textDiv = document.getElementById("slider-text");
+            textDiv.style.opacity = "0";  // Fade out effect
 
-        <div id="slider-text" style="font-family:'Source Sans Pro','Source Sans 3','san-serif' !important;">{messages[0]}</div>
+            setTimeout(function() {{
+                index = (index + 1) % messages.length;
+                textDiv.innerHTML = messages[index];
+                textDiv.style.opacity = "1";  // Fade in effect
+            }}, 500);
+        }}
 
-        <script>
-            var messages = {messages_js};  // Messages from Python
-            var index = 0;
-            var interval = setInterval(slideText, 3000);  // Change text every 1 sec
+        // Pause on hover
+        document.getElementById("slider-text").addEventListener("mouseover", function() {{
+            clearInterval(interval);
+        }});
 
-            function slideText() {{
-                var textDiv = document.getElementById("slider-text");
-                textDiv.style.opacity = "0";  // Fade out effect
-                textDiv.style.fontFamily = "Source Sans Pro","Source Sans 3 !important"
+        document.getElementById("slider-text").addEventListener("mouseout", function() {{
+            interval = setInterval(slideText, 3000);
+        }});
+    </script>
 
-                setTimeout(function() {{
-                    index = (index + 1) % messages.length;
-                    textDiv.innerHTML = messages[index];
-                    textDiv.style.opacity = "1";  // Fade in effect
-                }}, 500);
-            }}
+</body>
+</html>
+"""
 
-            // Pause on hover
-            document.getElementById("slider-text").addEventListener("mouseover", function() {{
-                clearInterval(interval);
-            }});
 
-            document.getElementById("slider-text").addEventListener("mouseout", function() {{
-                interval = setInterval(slideText, 3000);
-            }});
-        </script>
+#LOGGING MCHANISM HR
+# --- Basic Authentication ---
+USER_CREDENTIALS = {
+    "humphrey": "password123@",
+    "eoin": "E1on12@",
+}
 
-    </body>
-    </html>
-    """
+# ✅ Content Section Below Cover
+if st.session_state.selected_page == "Home":
 
+    if "authenticated" not in st.session_state:
+        st.session_state["authenticated"] = False
+
+    def login():
+        st.title("Login to Access the Dashboard")
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
+        if st.button("Login"):
+            if username in USER_CREDENTIALS and USER_CREDENTIALS[username] == password:
+                st.session_state["authenticated"] = True
+                st.success("Login successful!")
+                st.rerun()
+            else:
+               st.error("Invalid username or password!")
+
+    if not st.session_state["authenticated"]:
+        login()
+        st.stop()
 
 
 
@@ -440,7 +418,7 @@ if st.session_state.selected_page == "Home":
                 <a href="?selected_page={page_slug}" style="text-decoration: none;">
                     <div style="background-color:{tile_color}; 
                                 padding:23px; 
-                                border-radius:20px; 
+                                border-radius:8px; 
                                 text-align:center;
                                 margin-bottom: 20px; 
                                 cursor:pointer; 
@@ -468,7 +446,7 @@ elif st.session_state.selected_page == "Reference":
 
         /* Style for each individual tab */
         .stTabs [data-baseweb="tab"] {
-            background-color:#000000;  /* Green background for all tabs */
+            background-color:rgb(42,52,68);  /* Green background for all tabs */
             color: white;
             padding: 10px;
             text-align: center;
@@ -628,66 +606,6 @@ elif st.session_state.selected_page == "Document":
 
 # ✅ Handle Page Navigation and Load Content
 else:
-    import base64
-
-    # Get the base64 image
-    background_image = get_base64_image("background.jpg")  # Replace with your local file name
-    logo_image = get_base64_image("SBT_Logo.png")  # Ensure logo remains visible
-    # Inject CSS for the background image with the existing logo size & position
-
-    st.markdown(
-    f"""
-    <style>
-    body{{
-        font-family:'Source Sans Pro','Source Sans 3';
-    }}
-    .cover-container {{
-        position: relative;
-        width: 100%;
-        height: 350px; /* Adjust height as needed */
-        background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6)), 
-                    url("{background_image}") no-repeat center center;
-        background-size: cover;
-        display: flex;
-        align-items: center;
-        justify-content: left;
-        border-radius:20px;
-        padding-left: 50px; /* Ensures logo remains aligned */
-    }}
-
-    .overlay {{
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 50px; /* Space between logo and title */
-        background: rgba(0, 0, 0, 0); /* Semi-transparent background */
-        padding: 20px;
-        border-radius: 10px;
-    }}
-
-    .title {{
-        color: #8B008B;
-        font-size: 50px;
-        font-weight: bold;
-        font-family: 'Source Sans Pro','Source Sans 3',san-serif !important'
-    }}
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# ✅ Cover Image Section with Logo & Title
-    st.markdown(
-    f"""
-    <div class="cover-container">
-        <div class="overlay">
-            <img src="{logo_image}" width="300">  <!-- Embedded base64 logo -->
-            <!-- this is a comment <div class="title">Pathway Explorer</div> -->
-        </div>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
     module_name = pages.get(st.session_state.selected_page, {}).get("file")
     if module_name:
         try:
@@ -699,5 +617,4 @@ else:
 
 if st.button("Logout"):
     st.session_state["authenticated"] = False
-    navigate("Home")
     st.rerun()
