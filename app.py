@@ -6,10 +6,10 @@ import os
 import base64
 import docx
 from io import BytesIO
+from io import BytesIO
 from streamlit import session_state as ss
 import plotly.express as px
 from streamlit_pdf_viewer import pdf_viewer
-
 
 # Function to load full dataset
 @st.cache_data
@@ -156,17 +156,25 @@ pages = {
 
 # ✅ Set page config
 st.set_page_config(page_title="Pathway Explorer", layout="wide")
-
+st.markdown(
+"""
+<style>
+.css-1jc7ptx, .e1ewe7hr3, .viewerBadge_container__1QSob,
+.styles_viewerBadge__1yB5_, .viewerBadge_link__1S137,
+.viewerBadge_text__1JaDK {
+display: none;
+}
+</style>
+""",
+unsafe_allow_html=True
+)
 # ✅ Get the selected page from URL reference (if exists)
 query_params = st.query_params
 selected_page = query_params.get("selected_page", None)
 
-
 # ✅ Initialize session state for navigation
 if "selected_page" not in st.session_state:
     st.session_state.selected_page = selected_page if selected_page else "Home"
-
-
 
 # ✅ Navigation function using `st.query_params`
 def navigate(page):
@@ -252,7 +260,7 @@ st.markdown(
         position: relative;
         width: 100%;
         height: 350px; /* Adjust height as needed */
-        background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6)), 
+        background: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.3)), 
                     url("{background_image}") no-repeat center center;
         background-size: cover;
         display: flex;
@@ -298,9 +306,9 @@ import streamlit.components.v1 as components
 
 # List of text messages
 messages = [
-    "<span style='font-size: 32px; font-weight: bold;font-family: Source Sans Pro,san-serif';'>What is the Goal?</span><br> <span style='font-size: 17px; font-weight: 100;'>The Pathway Explorer provides emission scenarios, sectoral pathways, relevant metrics, and interim benchmarks that align with the Paris Agreement’s 1.5°C goal. It offers detailed insights across key sectors, including power, light and heavy industry, buildings, transport, and FLAG (Forestry, Land Use and Agriculture). </span>",
-    "<span style='font-size: 32px; font-weight: bold;font-family: Source Sans Pro,san-serif'>How is it Designed?</span><br><span style='font-size: 17px; font-weight: 100;'>The Pathway Explorer contains scenarios that pass the SBTi's six updated principles, which ensure that pathways meet the highest standards of ambition, responsibility, scientific rigor, actionability, robustness, and transparency. These principles guide the selection of 1.5°C-aligned pathways for credible decarbonization planning </span>",
-    "<span style='font-size: 32px; font-weight: bold;font-family: Source Sans Pro,san-serif'>Why it Matters?</span><br><span style='font-size: 17px; font-weight: 100;'>In a crowded landscape of climate scenarios, the Explorer offers transparent, science-based benchmarks aligned with robust principles — helping close the ambition-to-action gap. </span>",
+    "<span style='color:black; font-size: 32px; font-weight: bold;font-family: Montserrat';'>What is the Goal?</span><br> <span style='color:black; font-size: 17px; font-weight: 100;'>The Pathway Explorer provides emission scenarios, sectoral pathways, relevant metrics, and interim benchmarks that align with the Paris Agreement’s 1.5°C goal. It offers detailed insights across key sectors, including power, light and heavy industry, buildings, transport, and FLAG (Forestry, Land Use and Agriculture). </span>",
+    "<span style='color:black; font-size: 32px; font-weight: bold;'>How is it Designed?</span><br><span style='color:black; font-size: 17px; font-weight: 100;'>The Pathway Explorer contains scenarios that pass the SBTi's six updated principles, which ensure that pathways meet the highest standards of ambition, responsibility, scientific rigor, actionability, robustness, and transparency. These principles guide the selection of 1.5°C-aligned pathways for credible decarbonization planning </span>",
+    "<span style='color:black; font-size: 32px; font-weight: bold;'>Why it Matters?</span><br><span style='color:black; font-size: 17px; font-weight: 100;'>In a crowded landscape of climate scenarios, the Explorer offers transparent, science-based benchmarks aligned with robust principles — helping close the ambition-to-action gap. </span>",
     ]
 
 # JavaScript-friendly format (convert Python list to JSON string)
@@ -319,7 +327,6 @@ html_code = f"""
             padding: 10px;
             transition: opacity 0.5s;
             line-height: 1.5;
-            font-family:"Source Sans Pro","san-serif" !important;
         }}
     </style>
 </head>
@@ -358,79 +365,135 @@ html_code = f"""
 """
 
 
-#LOGGING MCHANISM HR
-# --- Basic Authentication ---
-USER_CREDENTIALS = {
-    "humphrey": "password123@",
-    "eoin": "E1on12@",
-}
 
 # ✅ Content Section Below Cover
 if st.session_state.selected_page == "Home":
-
-    if "authenticated" not in st.session_state:
-        st.session_state["authenticated"] = False
-
-    def login():
-        st.title("Login to Access the Dashboard")
-        username = st.text_input("Username")
-        password = st.text_input("Password", type="password")
-        if st.button("Login"):
-            if username in USER_CREDENTIALS and USER_CREDENTIALS[username] == password:
-                st.session_state["authenticated"] = True
-                st.success("Login successful!")
-                st.rerun()
-            else:
-               st.error("Invalid username or password!")
-
-    if not st.session_state["authenticated"]:
-        login()
-        st.stop()
-
-
-
     # Render the HTML inside Streamlit
     components.html(html_code, height=150)  # Increased height for better visibility
-    #st.markdown('<div class="content-wrapper">', unsafe_allow_html=True)
+
+    # Group pages by category with custom background colors
+    categories = {
+        "💡Energy": {
+            "titles": ["Power Generation", "Oil & Gas"],
+            "background_color": "#FFDDC1"  # Light peach
+        },
+        "🚊Transport": {
+            "titles": ["Road", "Rail", "Aviation"],
+            "background_color": "#D1E8E2"  # Light teal
+        },
+        "🏭Heavy Industry": {
+            "titles": ["Steel", "Cement", "Chemical", "Aluminum Production"],
+            "background_color": "#F8C8DC"  # Light pink
+        },
+        "🏭Light Industry": {
+            "titles": ["Light Industries","Apperal & Footwear",  "Pulp & Paper"],
+            "background_color": "#FFFACD"  # Light yellow
+        },
+        "🏭Land": {
+            "titles": ["FLAG"],
+            "background_color": "#abdbe3"  # Light yellow
+        },
+        "🪙Finance": {
+            "titles": ["Financial Institution"],
+            "background_color": "#E6E6FA"  # Lavender
+        },
+        "🏗️Buildings": {
+            "titles": ["Residential", "Commercial",],
+            "background_color": "#F6E5FA"  # Lavender
+        }
+    }
     
-    #st.write("Here you can find all the raw data, eligible scenarios, and pathways that inform the cross-sector and sector-specific standards in the SBTi.")
+    # Render categories and their respective buttons in rows
+    category_keys = list(categories.keys())
+    
+    for i in range(0, len(category_keys), 3):  # Iterate two categories at a time
+        col1, col2, col3 = st.columns(3)
 
-    # Close content wrapper
-    #st.markdown('</div>', unsafe_allow_html=True)
+        for col, category_key in zip([col1, col2, col3], category_keys[i:i + 3]):
+            category_data = categories[category_key]
 
-
-    col1, col2, col3 = st.columns(3)  # Three columns for tiles
-
-    # ✅ Render tiles into assigned columns
-    for title, data in pages.items():
-        tile_color = data["color"]
-        pathway = data["pathway"]
-        metrics_html = "<br>- ".join(data["metrics"])
-        page_slug = urllib.parse.quote(title)  # Convert title to a valid URL fragment
-
-        col = col1 if data["column"] == 1 else col2 if data["column"] == 2 else col3
-
-        with col:
-
-            # ✅ Clickable Tile with a Link Reference
-            st.markdown(
-                f"""
-                <a href="?selected_page={page_slug}" style="text-decoration: none;">
-                    <div style="background-color:{tile_color}; 
-                                padding:23px; 
-                                border-radius:8px; 
-                                text-align:center;
-                                margin-bottom: 20px; 
-                                cursor:pointer; 
-                                box-shadow: 2px 2px 10px rgba(0,0,0,0.2);">
-                        <h3 style='color:white;'>{title}</h3>
-                        <p style='color:white; margin:5px 0;'><b>Pathway:</b> {pathway}</p>
-                        <p style='color:white; margin:5px 0;'><b>Metrics:</b><br>- {metrics_html}</p>
+            with col:
+                # Add category title with centered alignment and custom background color
+                st.markdown(
+                    f"""
+                    <div style="background-color: {category_data['background_color']}; padding: 10px; border-radius: 8px; text-align: center; margin-bottom: 5px;">
+                        <strong style="font-size: 18px; color: #333;">{category_key}</strong>
                     </div>
-                </a>
-                """,
-                unsafe_allow_html=True
-            )
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+                # Create a two-column layout for buttons under each category
+                button_col1, button_col2 = st.columns(2)
+
+                for title in category_data["titles"]:
+                    page_data = pages.get(title, {})
+                    tile_color = category_data["background_color"]  # Use category background color for buttons
+                    
+                    # Define custom help text for each button
+                    custom_help_texts = {
+                        "Power Generation": "Explore Power Generation sector with metrics like tCO2e -tCO2/MWh and % Zero Carbon Capacity.",
+                        "Light Industries": "Dive into Light Industries with metrics such as tCO2e -% zero carbon heat and % zero electrified heat.",
+                        "Pulp & Paper": "Analyze Pulp & Paper sector with metrics like tCO2e and tCO2/tonne.",
+                        "Oil & Gas": "Understand Oil & Gas sector with metrics such as tCO2e and tCO2e/boe.",
+                        "Rail": "Explore Rail sector with metrics like tCO2e and tCO2/tonne.km.",
+                        "Aluminum Production": "Discover Aluminum Production sector with metrics such as tCO2e and tCO2/tonne.",
+                        "Residential": "Learn about Residential sector with metrics like tCO2e and tCO2/m2.",
+                        "Road": "Examine Road sector with metrics such as tCO2e and tCO2/tonne.km.",
+                        "Cement": "Explore Cement sector with metrics like tCO2e and tCO2/tonne.",
+                        "Commercial": "Understand Commercial sector with metrics such as tCO2e and tCO2/m2.",
+                        "Aviation": "Dive into Aviation sector with metrics like tCO2e and tCO2/tonne.km.",
+                        "Steel": "Analyze Steel sector with metrics such as tCO2e and tCO2/tonne.",
+                        "Chemical": "Explore Chemical sector with metrics like tCO2e and tCO2/tonne.",
+                        "FLAG ": "Learn about FLAG sector with metrics such as tCO2e and tCO2/m3 -tCO2/freshweight.",
+                        "Apperal & Footwear": "Discover Apparel & Footwear sector with metrics like tCO2e and tCO2/MWh.",
+                        "Financial Institution": "Understand Financial Institution sector with metrics such as tCO2e and tCO2/MWh.",
+                        "Other Sectors": "Explore Other Sectors with metrics like tCO2e and -.",
+                    }
+
+                    # Get the help text for the current button
+                    help_text = custom_help_texts.get(title, f"Explore {title} sector.")
+                    #title = "Special Button"
+                    unique_id = title.replace(" ", "_").lower()
+                    # Alternate buttons between the two columns
+                    with button_col1 if category_data["titles"].index(title) % 2 == 0 else button_col2:
+                        #st.write(tile_color)
+                        st.markdown("""
+                            <style>
+                            /* Transparent button with opacity */
+                            .{unique_id} button {
+                                background-color: rgba(239, 233, 242, 0.8) !important;
+                                color: #333 !important;
+                                border: 2px solid #999 !important;
+                                border-radius: 80px !important;
+                                padding: 0px !important; 
+                                width: 100% !important; 
+                                font-weight: bold !important; 
+                                font-size: 120px;
+                                margin-bottom: 0px !important; 
+                                transition: all 0.3s ease;
+                            }
+                            .{unique_id} button:hover {
+                                background-color: rgba(75, 0, 230, 0.9) !important;
+                                color: white !important;
+                                transform: scale(1.05);
+                            }
+                            </style>
+                        """, unsafe_allow_html=True)
+                        
+                        if st.button(
+                            label=f"{title}",
+                            key=unique_id,
+                            help=help_text, 
+                        ):
+                            navigate(title)
+
+                        # Close the div wrapper
+                        # Wrap the button in a unique class div
+                            st.markdown(f'<div class="{unique_id}">', unsafe_allow_html=True)
+                            st.markdown("</div>", unsafe_allow_html=True)
+                          
+
 
 elif st.session_state.selected_page == "Reference":
     
@@ -578,32 +641,29 @@ elif st.session_state.selected_page == "Reference":
                 st.dataframe(df, hide_index=True)
             else:
                 st.error("Error loading data preview.")
-
 elif st.session_state.selected_page == "Document":
  # Redirect to document page
-        st.title("PDF Viewer")
+    st.title("How SBTi Uses Climate Science")
 
-        # Local file path (Replace this with your actual path)
-        pdf_path = "documents/sample.pdf"
+    # Local file path (Replace this with your actual path)
+    image_path = "documents/sample.png"
 
-
-        if os.path.exists(pdf_path):
-            with open(pdf_path, "rb") as f:
-                ss.pdf_ref = f.read()  # Store binary content
-        else:
-            st.error("File not found. Please check the path.")
-            ss.pdf_ref = None
-
-        # Display PDF using `streamlit_pdf_viewer`
-        if st.session_state.pdf_ref:
-            pdf_viewer(input=st.session_state.pdf_ref, width="100%")
-            # Download Button
-            st.download_button(label="📥 Download PDF", 
-                            data=ss.pdf_ref, 
-                            file_name="sample.pdf", 
-                            mime="application/pdf")
-
-
+    if os.path.exists(image_path):
+        # Display PNG image
+        st.image(image_path, width=1300)
+        
+        # Download Button
+        with open(image_path, "rb") as img_file:
+            img_data = img_file.read()
+        
+        st.download_button(
+            label="📥 Download pdf",
+            data=img_data,
+            file_name="sample.pdf",
+            mime="application/pdf"
+        )
+    else:
+        st.error("File not found. Please check the path.")
 # ✅ Handle Page Navigation and Load Content
 else:
     module_name = pages.get(st.session_state.selected_page, {}).get("file")
@@ -614,7 +674,3 @@ else:
             spec.loader.exec_module(module)  
         except Exception as e:
             st.error(f"⚠️ Error loading {module_name}: {e}")
-
-if st.button("Logout"):
-    st.session_state["authenticated"] = False
-    st.rerun()
