@@ -124,7 +124,7 @@ pages = {
         "metrics": ["tCO2e", "tCO2/tonne"],
         "color": "#D77932",  # Pink
     },
-     "FLAG ": {
+     "FLAG": {
         "file": "FLAG",
         "column": 2,  # Third column
         "pathway": "IPCC",
@@ -445,7 +445,7 @@ if st.session_state.selected_page == "Home":
                         "Aviation": "Dive into Aviation sector with metrics like tCO2e and tCO2/tonne.km.",
                         "Steel": "Analyze Steel sector with metrics such as tCO2e and tCO2/tonne.",
                         "Chemical": "Explore Chemical sector with metrics like tCO2e and tCO2/tonne.",
-                        "FLAG ": "Learn about FLAG sector with metrics such as tCO2e and tCO2/m3 -tCO2/freshweight.",
+                        "FLAG": "Learn about FLAG sector with metrics such as tCO2e and tCO2/m3 -tCO2/freshweight.",
                         "Apperal & Footwear": "Discover Apparel & Footwear sector with metrics like tCO2e and tCO2/MWh.",
                         "Financial Institution": "Understand Financial Institution sector with metrics such as tCO2e and tCO2/MWh.",
                         "Other Sectors": "Explore Other Sectors with metrics like tCO2e and -.",
@@ -490,8 +490,8 @@ if st.session_state.selected_page == "Home":
 
                         # Close the div wrapper
                         # Wrap the button in a unique class div
-                            st.markdown(f'<div class="{unique_id}">', unsafe_allow_html=True)
-                            st.markdown("</div>", unsafe_allow_html=True)
+                        st.markdown(f'<div class="{unique_id}">', unsafe_allow_html=True)
+                        st.markdown("</div>", unsafe_allow_html=True)
                           
 
 
@@ -541,7 +541,7 @@ elif st.session_state.selected_page == "Reference":
         "Document": {
             "file_path": "Alldata.xlsx",
 #            "filter_columns": ["Model", "Scenario", "Region", "Variable"],
-            "filter_columns": ["Scenario","Variable"],
+            "filter_columns": ["Scenario","Variable","Metrics"],
             "remove_columns": [],
             "apply_year_filter": False
         },
@@ -578,7 +578,11 @@ elif st.session_state.selected_page == "Reference":
                 file_path = dataset_info["file_path"]
 
                 df = load_full_data(file_path,None,None)
+                df2 = load_full_data('Metrics.xlsx',None,None)
                 df.rename(columns={'Metric':'Variable'}, inplace=True)
+                
+                df = pd.concat([df,df2], axis=1)
+                print(df.columns)
                 # Drop integer and float columns, keeping only categorical columns
                 #categorical_columns = df.select_dtypes(exclude=['int64', 'float64']).columns
 

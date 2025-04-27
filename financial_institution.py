@@ -253,7 +253,7 @@ for idx, tab in enumerate(tabs):
                         df_melted["Value"] = pd.to_numeric(df_melted["Value"], errors='coerce')
 
                         median_values = df_melted.groupby('Year')['Value'].median().reset_index()
-                        median_values['Scenario'] = 'Median'
+                        median_values['Scenario'] = 'SBTi'
 
                         # Combine the original data with the median data
                         if dataset_name not in ('Oil & Gas', "Aluminium", "Cement","Steel","Pulp & Paper", "Other Industries"):
@@ -283,7 +283,7 @@ for idx, tab in enumerate(tabs):
                         # Set chart height
                         fig.update_layout(height=600, width=1200)  # Adjust the height as needed (default is ~450)
                         if dataset_name!='Oil & Gas':
-                            fig.update_traces(line=dict(color="black", width=4), selector=dict(name="Median"),)
+                            fig.update_traces(line=dict(color="black", width=4), selector=dict(name="SBTi"),)
 
                         st.plotly_chart(fig)      
 
@@ -299,9 +299,9 @@ for idx, tab in enumerate(tabs):
 
                         # Calculate the median across all models for each year
                         median_values = df_melted.groupby('Year')['Value'].median().reset_index()
-                        median_values['Model'] = 'Median - ALL'
-                        median_values['Scenario'] = 'Median - ALL'
-                        median_values['scen_id'] = 'Median - ALL'
+                        median_values['Model'] = 'SBTi'
+                        median_values['Scenario'] = 'SBTi'
+                        median_values['scen_id'] = 'SBTi'
 
                         # Combine the original data with the median data
                         df_combined = pd.concat([df_melted, median_values])
@@ -321,7 +321,7 @@ for idx, tab in enumerate(tabs):
 
                         # Set the line styles for median and other models
                         fig.update_traces(line=dict(color="grey"), selector=dict(name="scen_id"))
-                        fig.update_traces(line=dict(color="black", width=4), selector=dict(name="Median - ALL"),)
+                        fig.update_traces(line=dict(color="black", width=4), selector=dict(name="SBTi"),)
 
                         # Set chart height
                         fig.update_layout(height=600, width=1200)  # Adjust the height as needed (default is ~450)
@@ -340,9 +340,9 @@ for idx, tab in enumerate(tabs):
 
                         # Calculate the median across all models for each year
                         median_values = df_melted.groupby('Year')['Value'].median().reset_index()
-                        median_values['Model'] = 'Median - ALL'
-                        median_values['Scenario'] = 'Median - ALL'
-                        median_values['scen_id'] = 'Median - ALL'
+                        median_values['Model'] = 'SBTi'
+                        median_values['Scenario'] = 'SBTi'
+                        median_values['scen_id'] = 'SBTi'
                         
                         
                         if df_melted["Building type"].nunique()==1:
@@ -361,7 +361,7 @@ for idx, tab in enumerate(tabs):
 
                             # Set the line styles for median and other models
                             fig.update_traces(line=dict(color="grey"), selector=dict(name="Country"))
-                            fig.update_traces(line=dict(color="black", width=4), selector=dict(name="Median - ALL"),)
+                            fig.update_traces(line=dict(color="black", width=4), selector=dict(name="SBTi"),)
 
                             # Set chart height
                             fig.update_layout(height=600, width=1200)  # Adjust the height as needed (default is ~450)
@@ -383,7 +383,7 @@ for idx, tab in enumerate(tabs):
 
                             # Set the line styles for median and other models
                             fig.update_traces(line=dict(color="grey"), selector=dict(name="Building type"))
-                            fig.update_traces(line=dict(color="black", width=4), selector=dict(name="Median - ALL"),)
+                            fig.update_traces(line=dict(color="black", width=4), selector=dict(name="SBTi"),)
 
                             # Set chart height
                             fig.update_layout(height=600, width=1200)  # Adjust the height as needed (default is ~450)
@@ -485,272 +485,132 @@ for idx, tab in enumerate(tabs):
             datasets_info2 = {
                 "NGFS": {
                     "file_path": "FINZ.xlsx",
-                    "filter_columns": ["Scenario","Metric","Unit"],
+                    "filter_columns": ["Scenario", "Metric", "Unit"],
                     "remove_columns": [],
                     "apply_year_filter": False
                 },
-                    "OECM": {
+                "OECM": {
                     "file_path": "FINZ.xlsx",
                     "filter_columns": ["Variable", "Region"],
                     "remove_columns": [],
                     "apply_year_filter": False
-                } }
-            tab2 = st.tabs(["NGFS", "OECM"])
+                }
+            }
+
+            tab2 = st.tabs(list(datasets_info2.keys()))
             milestone_image1 = 'finz1_s1.png'
-            # Iterate over each tab and display corresponding data
+
             for idx, tab in enumerate(tab2):
                 dataset_name = list(datasets_info2.keys())[idx]
-                dataset_info2 = datasets_info2[dataset_name]
+                dataset_info2_current = datasets_info2[dataset_name]
+                file_path = dataset_info2_current["file_path"]
+                filter_columns = dataset_info2_current["filter_columns"]
+                apply_year_filter = dataset_info2_current["apply_year_filter"]
+
                 with tab:
-                    if dataset_name=="NGFS":
-                        file_path = dataset_info2["file_path"]
-                        remove_cols = dataset_info2['remove_columns']
-                        df = pd.read_excel(file_path,sheet_name='FINZ_NGFS')
-                        #st.write("### Data Preview")
-                        #st.dataframe(df_preview.head(), hide_index=True)
+                    if dataset_name == "NGFS":
+                        df = pd.read_excel(file_path, sheet_name='FINZ_NGFS')
+                    else:
+                        df = pd.read_excel(file_path, sheet_name='FINZ_OECM')
 
-                        # Milestone Image 
-                        st.write(f"### Key Milestone for Financial Institution")
-                        st.image(milestone_image1)
-                        col1, col2 = st.columns([1, 5])
-                        categorical_columns = dataset_info2["filter_columns"]
-                        # Identify year columns (assuming they are numeric)
-                        year_columns = [(col) for col in df.columns if str(col).isdigit()]
-                        year_columns = sorted(year_columns, key=int)
+                    st.write(f"### Key Milestone for Financial Institution")
+                    st.image(milestone_image1)
 
-                        # Filtering UI based on the full data columns (not preview)
-                        st.write("### Filter Data")
-                        filters = {}
-                        filter_columns = dataset_info2["filter_columns"]
-                        cols = st.columns(len(filter_columns))
+                    year_columns = sorted([col for col in df.columns if str(col).isdigit()], key=int)
 
-                        selected_values = {}  # For storing selected filter values
-                        
-                        # Update filter options dynamically based on previous selections
-                        # Update filter options dynamically based on previous selections
-                        for i, col in enumerate(filter_columns):
-                            if col in df.columns:
-                                options = df[col].astype(str).unique().tolist()
-                                selected_values[col] = cols[i].multiselect(f"{col}", options, key=f"{col}")
+                    st.write("### Filter Data")
+                    cols = st.columns(len(filter_columns))
+                    selected_values = {
+                        col: cols[i].multiselect(f"{col}", df[col].dropna().astype(str).unique(), key=f"{col}_{dataset_name}")
+                        for i, col in enumerate(filter_columns) if col in df.columns
+                    }
 
-                        # Apply the filter to the dataset
-                        for col, values in selected_values.items():
-                            if values:  # Ensure selections are made
-                                df = df[df[col].astype(str).str.lower().isin([v.lower() for v in values])]
-                        
-                        # Add year range filters for 'AllData' dataset or any dataset requiring year filtering
-                        if dataset_info["apply_year_filter"]:
-                            # Get list of years from the dataset
-                            year_columns = [str(col) for col in df.columns if str(col).isdigit()]
-                            year_columns = sorted(year_columns, key=int)  # Sort years in ascending order
+                    # Apply filters
+                    for col, values in selected_values.items():
+                        if values:
+                            df = df[df[col].astype(str).str.lower().isin([v.lower() for v in values])]
 
-                            # Dropdown for Start Year
-                            start_year = st.selectbox(
-                                "Select Start Year:",
-                                options=year_columns,
-                                index=0,  # Default to the first year
-                                key=f"start_year_{dataset_name}_{idx}"
+                    # Year Filtering
+                    if apply_year_filter:
+                        start_year = st.selectbox(
+                            "Select Start Year:", options=year_columns, index=0, key=f"start_year_{dataset_name}"
+                        )
+                        end_year = st.selectbox(
+                            "Select End Year:", options=year_columns, index=len(year_columns) - 1, key=f"end_year_{dataset_name}"
+                        )
+                        if int(end_year) < int(start_year):
+                            st.error("End Year must be greater than or equal to Start Year.")
+                            end_year = start_year
+
+                        year_range = list(map(str, range(int(start_year), int(end_year) + 1)))
+                        cols_to_keep = filter_columns + year_range
+                        df = df[cols_to_keep]
+                    else:
+                        year_range = year_columns  # All available years if no year filter
+
+                    # Button to apply filter and plot
+                    if st.button("Apply Filters", key=f"apply_filters_{dataset_name}"):
+                        st.write(f"### Filtered Data {dataset_name}")
+                        st.dataframe(df.head(100), hide_index=True)
+
+                        excel_data = to_excel(df)
+                        st.download_button(
+                            label="Download Excel",
+                            data=excel_data,
+                            file_name=f"{dataset_name}_filtered_data.xlsx",
+                            mime="application/vnd.ms-excel",
+                            key=f"download_button_{dataset_name}"
+                        )
+
+                        df.fillna(0, inplace=True)
+                        df[year_range] = df[year_range].apply(pd.to_numeric, errors='coerce')
+
+                        if dataset_name == "NGFS":
+                            id_vars = filter_columns
+                            df_melted = df.melt(id_vars=id_vars, value_vars=year_range, var_name="Year", value_name="Value")
+                            df_melted["Scenario"] = df_melted.get('Scenario', 'Original')
+
+                            # SBTi Median Addition
+                            median_values = df_melted.groupby('Year', as_index=False)['Value'].median()
+                            median_values["Scenario"] = "SBTi"
+                            df_melted = pd.concat([df_melted, median_values], ignore_index=True)
+
+                            unit = df_melted["Unit"].unique()[0] if "Unit" in df_melted.columns and df_melted["Unit"].nunique() == 1 else "Unit (Mixed)"
+                            title_val = df_melted["Metric"].unique()[0] if "Metric" in df_melted.columns and df_melted["Metric"].nunique() == 1 else "Multiple Metric"
+
+                            fig = px.line(
+                                df_melted,
+                                x="Year",
+                                y="Value",
+                                color='Scenario',
+                                title=f'"{title_val}" - Trend Comparison',
+                                labels={"Value": unit, "Year": "Year", "Scenario": "Scenario"},
+                                markers=True
                             )
-
-                            # Dropdown for End Year
-                            end_year = st.selectbox(
-                                "Select End Year:",
-                                options=year_columns,
-                                index=len(year_columns)-1,  # Default to the last year
-                                key=f"end_year_{dataset_name}_{idx}"
-                            )
-
-                            # Ensure end year is greater than or equal to start year
-                            if int(end_year) < int(start_year):
-                                st.error("End Year must be greater than or equal to Start Year.")
-                                end_year = start_year
-
-                            # Apply the year filter to the dataset
-                            df = filter_by_year(df, filter_columns, int(start_year), int(end_year))
-
-                        # Button to load full data and apply filters
-                        if st.button("Apply Filters", key=f"apply_filters_{dataset_name}_{idx}"):
-                            # Show filtered data
-                            st.write(f"### Filtered Data {dataset_name}")
-                            st.dataframe(df.head(100), hide_index=True)
-
-                            # Button to download filtered data
-                            excel_data = to_excel(df_full)
-                            st.download_button(
-                                label="Download Excel",
-                                data=excel_data,
-                                file_name=f"{dataset_name}_filtered_data.xlsx",
-                                mime="application/vnd.ms-excel",
-                                key=f"download_button_{dataset_name}_{idx}"  # Ensure unique key for download button
-                            )
-
-                            # Identify year columns (assuming they are numeric)
-                            year_columns = [(col) for col in df.columns if str(col).isdigit()]
-                            year_columns = sorted(year_columns, key=int)
-
-
-                            df.fillna(0, inplace=True)
-
-                            # Ensure year columns are numeric
-                            df[year_columns] = df[year_columns].apply(pd.to_numeric, errors='coerce')
-
-                            # Reshape data from wide to long format
-                            df_melted = df.melt(id_vars=filter_columns, 
-                                                    value_vars=year_columns, 
-                                                    var_name="Year", value_name="Value")
-                            
-                            #df_melted = df_melted.groupby(['Metric','Region','Year'])['Value'].median().reset_index()
-                            # Convert Year column to integer
-                            df_melted["Year"] = pd.to_numeric(df_melted["Year"], errors='coerce')
-                            df_melted["Value"] = pd.to_numeric(df_melted["Value"], errors='coerce')
-
-                            median_values = df_melted.groupby('Year')['Value'].median().reset_index()
-                            median_values['scen_id'] = 'Median'
-
-                            df_melted = pd.concat([df_melted,median_values])
-
-                            if df_melted["Unit"].nunique()==1:
-                                unit = df_melted["Unit"].unique()[0]
-                            else: unit='Unit (Mixed)'
-                            if df_melted["Metric"].nunique()==1:
-                                title_val = df_melted["Metric"].unique()[0]
-                            else: title_val='Multiple Metric'
-                            
-                            # Plotly line chart with multiple lines for different models
-                            fig = px.line(df_melted, x="Year", y="Value", color='Scenario',
-                                        title=f'"{title_val}" - Trend Comparison',
-                                        labels={"Value": unit, "Year": "Year", "Scenario": "Scenario"},
-                                        markers=True)  # Add markers to check if points are plotted
-                            
-                            fig.update_xaxes(type="linear",)
-                            # Set chart height
-                            fig.update_layout(height=600, width=1200)  # Adjust the height as needed (default is ~450)
-                            fig.update_traces(line=dict(color="black", width=4), selector=dict(name="Median"),)
-                            # Display chart in Streamlit
+                            fig.update_xaxes(type="linear")
+                            fig.update_layout(height=600, width=1200)
+                            fig.update_traces(line=dict(color="black", width=4), selector=dict(name="SBTi"))
                             st.plotly_chart(fig, use_container_width=True)
-                    
-                    else:  #dataset_name=="NGFS":
-                        
-                        file_path = dataset_info2["file_path"]
-                        milestone_image2 = 'finz1_s1.png'
-                        remove_cols = dataset_info2['remove_columns']
-                        df = pd.read_excel(file_path,sheet_name='FINZ_OECM')
-                        #st.write("### Data Preview")
-                        #st.dataframe(df_preview.head(), hide_index=True)
 
-                        # Milestone Image 
-                        st.write(f"### Key Milestone for Financial Institution")
-                        st.image(milestone_image2)
-                        col1, col2 = st.columns([1, 5])
-                        categorical_columns = dataset_info2["filter_columns"]
-                        # Identify year columns (assuming they are numeric)
-                        year_columns = [(col) for col in df.columns if str(col).isdigit()]
-                        year_columns = sorted(year_columns, key=int)
+                        else:  # OECM
+                            id_vars = ["Model", "Scenario", "Region", "Variable", "Unit"]
+                            df_melted = df.melt(id_vars=id_vars, value_vars=year_range, var_name="Year", value_name="Value")
 
-                        # Filtering UI based on the full data columns (not preview)
-                        st.write("### Filter Data")
-                        filters = {}
-                        filter_columns = dataset_info2["filter_columns"]
-                        cols = st.columns(len(filter_columns))
+                            unit = df_melted["Unit"].unique()[0] if df_melted["Unit"].nunique() == 1 else "Unit (Mixed)"
+                            title_val = df_melted["Variable"].unique()[0] if df_melted["Variable"].nunique() == 1 else "Multiple Variables"
 
-                        selected_values = {}  # For storing selected filter values
-                        
-                        # Update filter options dynamically based on previous selections
-                        # Update filter options dynamically based on previous selections
-                        for i, col in enumerate(filter_columns):
-                            if col in df.columns:
-                                options = df[col].astype(str).unique().tolist()
-                                selected_values[col] = cols[i].multiselect(f"{col}", options,)
-
-                        # Apply the filter to the dataset
-                        for col, values in selected_values.items():
-                            if values:  # Ensure selections are made
-                                df = df[df[col].astype(str).str.lower().isin([v.lower() for v in values])]
-
-                        # Add year range filters for 'AllData' dataset or any dataset requiring year filtering
-                        if dataset_info["apply_year_filter"]:
-                            # Get list of years from the dataset
-                            year_columns = [str(col) for col in df.columns if str(col).isdigit()]
-                            year_columns = sorted(year_columns, key=int)  # Sort years in ascending order
-
-                            # Dropdown for Start Year
-                            start_year = st.selectbox(
-                                "Select Start Year:",
-                                options=year_columns,
-                                index=0,  # Default to the first year
-                                key=f"start_year_{dataset_name}_{idx}"
+                            fig = px.line(
+                                df_melted,
+                                x="Year",
+                                y="Value",
+                                color='Region',
+                                title=f'"{title_val}" - Trend Comparison',
+                                labels={"Value": unit, "Year": "Year", "Region": "Region"},
+                                markers=True
                             )
-
-                            # Dropdown for End Year
-                            end_year = st.selectbox(
-                                "Select End Year:",
-                                options=year_columns,
-                                index=len(year_columns)-1,  # Default to the last year
-                                key=f"end_year_{dataset_name}_{idx}"
-                            )
-
-                            # Ensure end year is greater than or equal to start year
-                            if int(end_year) < int(start_year):
-                                st.error("End Year must be greater than or equal to Start Year.")
-                                end_year = start_year
-
-                            # Apply the year filter to the dataset
-                            df = filter_by_year(df, filter_columns, int(start_year), int(end_year))
-
-                        # Button to load full data and apply filters
-                        if st.button("Apply Filters", key=f"apply_filters_{dataset_name}_{idx}"):
-                            # Show filtered data
-                            st.write(f"### Filtered Data {dataset_name}")
-                            st.dataframe(df.head(100), hide_index=True)
-
-                            # Button to download filtered data
-                            excel_data = to_excel(df_full)
-                            st.download_button(
-                                label="Download Excel",
-                                data=excel_data,
-                                file_name=f"{dataset_name}_filtered_data.xlsx",
-                                mime="application/vnd.ms-excel",
-                                key=f"download_button_{dataset_name}_{idx}"  # Ensure unique key for download button
-                            )
-
-                            # Identify year columns (assuming they are numeric)
-                            year_columns = [(col) for col in df.columns if str(col).isdigit()]
-                            year_columns = sorted(year_columns, key=int)
-
-                            df.fillna(0, inplace=True)
-
-                            # Ensure year columns are numeric
-                            df[year_columns] = df[year_columns].apply(pd.to_numeric, errors='coerce')
-
-                            # Reshape data from wide to long format
-                            df_melted = df.melt(id_vars=["Model", "Scenario", "Region", "Variable", "Unit"], 
-                                                    value_vars=year_columns, 
-                                                    var_name="Year", value_name="Value")
-                                
-                            #df_melted = df_melted.groupby(['Variable','Region','Year'])['Value'].median().reset_index()
-                            # Convert Year column to integer
-                            df_melted["Year"] = pd.to_numeric(df_melted["Year"], errors='coerce')
-                            df_melted["Value"] = pd.to_numeric(df_melted["Value"], errors='coerce')
-                            if df_melted["Unit"].nunique()==1:
-                                unit = df_melted["Unit"].unique()[0]
-                            else: unit='Unit (Mixed)'
-                            if df_melted["Variable"].nunique()==1:
-                                title_val = df_melted["Variable"].unique()[0]
-                            else: title_val='Multiple Variables'
-                            
-                            
-                            # Plotly line chart with multiple lines for different models
-                            fig = px.line(df_melted, x="Year", y="Value", color='Region',
-                                        title=f'"{title_val}" - Trend Comparison',
-                                        labels={"Value": unit, "Year": "Year", "Region": "Region"},
-                                        markers=True)  # Add markers to check if points are plotted
-                            
-                            fig.update_xaxes(type="linear",)
-                            # Set chart height
-                            fig.update_layout(height=600, width=1200)  # Adjust the height as needed (default is ~450)
-                            # Display chart in Streamlit
+                            fig.update_xaxes(type="linear")
+                            fig.update_layout(height=600, width=1200)
                             st.plotly_chart(fig, use_container_width=True)
-                            
 
 
 
