@@ -592,8 +592,8 @@ elif st.session_state.selected_page == "Reference":
                 if "selected_var" not in st.session_state:
                     st.session_state["selected_var"] = categorical_columns[0]
 
-                st.title("Eligible SBTi Scenarios")
-                st.write("These are the eligible Scenarios that pass the principled-driven criteria used in cross-sector and sector-specific pathways")
+                st.title("Eligible SBTi Scenarios and metrics")
+                st.write("These are the eligible Scenarios that pass the principled-driven criteria used in cross-sector and sector-specific pathways. Also this includes all metrics used in SBTi sector specific standards, as well as metrics for all GHG emission scopes.")
                 # Layout: Left (buttons) | Right (data)
                 col1, col2 = st.columns([1, 5])
 
