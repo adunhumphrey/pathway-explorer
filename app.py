@@ -581,15 +581,13 @@ elif st.session_state.selected_page == "Reference":
                 df = load_full_data(file_path,None,None)
                 df2 = load_full_data('Metrics.xlsx',None,None)
                 df.rename(columns={'Metric':'Variable'}, inplace=True)
-                new_col = df2.columns
-                df = pd.concat([df,df2], axis=1)
-                print(df.columns)
+                
                 # Drop integer and float columns, keeping only categorical columns
                 #categorical_columns = df.select_dtypes(exclude=['int64', 'float64']).columns
 
                 # Remove unwated columns
-                categorical_columns = np.concatenate((dataset_info['filter_columns'],new_col))
-                print(categorical_columns)
+                categorical_columns = dataset_info['filter_columns']
+                
                 # Initialize session state for selection persistence
                 if "selected_var" not in st.session_state:
                     st.session_state["selected_var"] = categorical_columns[0]
@@ -604,10 +602,13 @@ elif st.session_state.selected_page == "Reference":
                     for col in categorical_columns:
                         if st.button(str(df[col].nunique())+" "+col):
                             st.session_state["selected_var"] = col  # Store selection persistently
+                    for col in ['Metrics']:
+                        if st.button(col):
+                            st.session_state["selected_var"] = col
 
                 # Right Column: Display unique values
                 with col2:
-                    if st.session_state["selected_var"]:
+                    if st.session_state["selected_var"] != "Metrics":
                         selected_var = st.session_state["selected_var"]
                         #st.subheader(f"Unique Values for: {selected_var}")
 
@@ -622,7 +623,8 @@ elif st.session_state.selected_page == "Reference":
                         unique_df = pd.DataFrame(filtered_values, columns=[selected_var]).reset_index()
                         #st.write(f'{unique_df[selected_var].nunique()}, unique {selected_var}')
                         st.dataframe(unique_df[selected_var].values, use_container_width=True, height=600)  # Full-width display
-
+                    else:
+                        st.dataframe(df2, hide_index=True)
 
             elif dataset_name == 'Criteria':
 
