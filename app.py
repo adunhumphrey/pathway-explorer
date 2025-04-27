@@ -3,6 +3,7 @@ import streamlit as st
 import pandas as pd
 import urllib.parse
 import os
+import numpy as np
 import base64
 import docx
 from io import BytesIO
@@ -541,7 +542,7 @@ elif st.session_state.selected_page == "Reference":
         "Document": {
             "file_path": "Alldata.xlsx",
 #            "filter_columns": ["Model", "Scenario", "Region", "Variable"],
-            "filter_columns": ["Scenario","Variable","Metrics"],
+            "filter_columns": ["Scenario","Variable"],
             "remove_columns": [],
             "apply_year_filter": False
         },
@@ -580,15 +581,15 @@ elif st.session_state.selected_page == "Reference":
                 df = load_full_data(file_path,None,None)
                 df2 = load_full_data('Metrics.xlsx',None,None)
                 df.rename(columns={'Metric':'Variable'}, inplace=True)
-                
+                new_col = df2.columns
                 df = pd.concat([df,df2], axis=1)
                 print(df.columns)
                 # Drop integer and float columns, keeping only categorical columns
                 #categorical_columns = df.select_dtypes(exclude=['int64', 'float64']).columns
 
                 # Remove unwated columns
-                categorical_columns = dataset_info['filter_columns']
-
+                categorical_columns = np.concatenate((dataset_info['filter_columns'],new_col))
+                print(categorical_columns)
                 # Initialize session state for selection persistence
                 if "selected_var" not in st.session_state:
                     st.session_state["selected_var"] = categorical_columns[0]
