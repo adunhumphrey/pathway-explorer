@@ -599,8 +599,8 @@ elif st.session_state.selected_page == "Reference":
                 if "selected_var" not in st.session_state:
                     st.session_state["selected_var"] = categorical_columns[0]
 
-                st.title("Eligible SBTi Scenarios")
-                st.write("These are the eligible Scenarios that pass the principled-driven criteria used in cross-sector and sector-specific pathways")
+                st.title("Eligible SBTi Scenarios and metrics")
+                st.write("These are the eligible Scenarios that pass the principled-driven criteria used in cross-sector and sector-specific pathways. Also explore the master list of metrics companies use to set SBTi-validated targets.")
                 # Layout: Left (buttons) | Right (data)
                 col1, col2 = st.columns([1, 5])
 
@@ -638,20 +638,21 @@ elif st.session_state.selected_page == "Reference":
                 file_path = dataset_info["file_path"]
                 remove_cols = dataset_info['remove_columns']
                 df = load_full_data(file_path,'criteria', None)
-                st.write('This sheet shows the phase out dates for some fossil commodities')
-                st.write('Disclaimer: The sector-specific requirements for key economic activities are derived from specific scenarios e.g IEA to provide additional guidelines on how activities need to transition at interim period on the way to net zero. The activity specific milestones are not available in all IPCC scenarios and there may be wide variations across  IPCC models. Therefore, the granularity that IEA provides for these indicators are useful, even though they may not align with the assumptions from the overall IPCC scenarios.')
+                st.write('These filters are informed by the guiding principles of the SBTi in its foundational science. They ensure that scenario selection aligns with ambition, responsibility, scientific rigor, actionability, robustness, and transparency. By applying these quantitative criteria, the SBTi ensures that only scientifically robust and equitable pathways are considered.')
                 st.dataframe(df, hide_index=True)
 
             elif dataset_name=="Phase-Out":
                 file_path = dataset_info["file_path"]
                 remove_cols = dataset_info['remove_columns']
                 df = pd.read_excel(file_path,sheet_name='Phase out dates',skiprows=3)
+                st.write('This sheet shows the phase out dates for some fossil commodities')
                 st.dataframe(df, hide_index=True)
             
             elif dataset_name=="Residuals":
                 file_path = dataset_info["file_path"]
                 remove_cols = dataset_info['remove_columns']
                 df = pd.read_excel(file_path,sheet_name='Residuals',skiprows=2)
+                st.write('This sheet shows the residual emissions in the net-zero year at a sectoral level. These emissions need to be counterbalanced with carbon removals to reach net-zero')
                 st.dataframe(df, hide_index=True)
             else:
                 st.error("Error loading data preview.")
