@@ -638,7 +638,7 @@ elif st.session_state.selected_page == "Reference":
                 file_path = dataset_info["file_path"]
                 remove_cols = dataset_info['remove_columns']
                 df = load_full_data(file_path,'criteria', None)
-                st.write('These filters are informed by the guiding principles of the SBTi in its foundational science. They ensure that scenario selection aligns with ambition, responsibility, scientific rigor, actionability, robustness, and transparency. By applying these quantitative criteria, the SBTi ensures that only scientifically robust and equitable pathways are considered.')
+                st.write('These filters are informed by the guiding principles of the SBTi in its foundational science. They ensure that scenario selection aligns with the principles of ambition, responsibility, scientific rigor, actionability, robustness, and transparency. By applying these quantitative criteria, the SBTi ensures that only scientifically robust and equitable scenarios are considered.')
                 st.dataframe(df, hide_index=True)
 
             elif dataset_name=="Phase-Out":
