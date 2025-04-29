@@ -181,10 +181,10 @@ if df_preview is not None:
             df_melted["Value"] = pd.to_numeric(df_melted["Value"], errors='coerce')
 
             median_values = df_melted.groupby('Year')['Value'].median().reset_index()
-            median_values['Scenario'] = 'Median'
+            median_values['Scenario'] = 'SBTi Pathway'
 
             # Combine the original data with the median data
-            df_combined = pd.concat([df_melted])
+            df_combined = pd.concat([df_melted, median_values])
 
             df_combined.dropna(subset=["Value"], inplace=True)
             df_combined = df_combined[df_combined['Value']!=0]
@@ -208,5 +208,5 @@ if df_preview is not None:
             # Set chart height
             fig.update_layout(height=600, width=1200)  # Adjust the height as needed (default is ~450)
 
-            fig.update_traces(line=dict(color="black", width=4), selector=dict(name="Median"),)
+            fig.update_traces(line=dict(color="black", width=4), selector=dict(name="SBTi Pathway"),)
             st.plotly_chart(fig)  

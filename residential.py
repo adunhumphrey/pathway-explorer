@@ -175,9 +175,9 @@ if df_preview is not None:
 
             # Calculate the median across all models for each year
             median_values = df_melted.groupby('Year')['Value'].median().reset_index()
-            median_values['Model'] = 'Median - ALL'
-            median_values['Scenario'] = 'Median - ALL'
-            median_values['scen_id'] = 'Median - ALL'
+            median_values['Model'] = 'SBTi Pathway'
+            median_values['Scenario'] = 'SBTi Pathway'
+            median_values['scen_id'] = 'SBTi Pathway'
             
             
             if df_melted["Building type"].nunique()==1:
@@ -196,7 +196,7 @@ if df_preview is not None:
 
                 # Set the line styles for median and other models
                 fig.update_traces(line=dict(color="grey"), selector=dict(name="Country"))
-                fig.update_traces(line=dict(color="black", width=4), selector=dict(name="Median - ALL"),)
+                fig.update_traces(line=dict(color="black", width=4), selector=dict(name="SBTi Pathway"),)
 
                 # Set chart height
                 fig.update_layout(height=600, width=1200)  # Adjust the height as needed (default is ~450)

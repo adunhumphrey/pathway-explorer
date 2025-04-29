@@ -174,9 +174,9 @@ if df_preview is not None:
 
         # Calculate the median across all models for each year
         median_values = df_melted.groupby('Year')['Value'].median().reset_index()
-        #median_values['Model'] = 'Median - ALL'
-        median_values['Scenario'] = 'Median - ALL'
-        #median_values['scen_id'] = 'Median - ALL'
+        #median_values['Model'] = 'SBTi Pathway'
+        median_values['Scenario'] = 'SBTi Pathway'
+        #median_values['scen_id'] = 'SBTi Pathway'
 
         # Combine the original data with the median data
         df_combined = pd.concat([df_melted, median_values])
@@ -193,10 +193,10 @@ if df_preview is not None:
                     title= metric_name, 
                     labels={"Value": unit, "Year": "Year", "Scenario": "Scenario"},
                     markers=True)
-
-        # Set the line styles for median and other models
+        fig.update_layout(plot_bgcolor="white")
+        # Set the line styles for, median and other models
         fig.update_traces(line=dict(color="grey"), selector=dict(name="scen_id"))
-        fig.update_traces(line=dict(color="black", width=4), selector=dict(name="Median - ALL"),)
+        fig.update_traces(line=dict(color="black", width=4), selector=dict(name="SBTi Pathway"),)
 
         # Set chart height
         fig.update_layout(height=600, width=1200)  # Adjust the height as needed (default is ~450)
