@@ -253,7 +253,7 @@ for idx, tab in enumerate(tabs):
                         df_melted["Value"] = pd.to_numeric(df_melted["Value"], errors='coerce')
 
                         median_values = df_melted.groupby('Year')['Value'].median().reset_index()
-                        median_values['Scenario'] = 'SBTi'
+                        median_values['Scenario'] = 'SBTi pathway'
 
                         # Combine the original data with the median data
                         if dataset_name not in ('Oil & Gas', "Aluminium", "Cement","Steel","Pulp & Paper", "Other Industries"):
@@ -283,7 +283,7 @@ for idx, tab in enumerate(tabs):
                         # Set chart height
                         fig.update_layout(height=600, width=1200)  # Adjust the height as needed (default is ~450)
                         if dataset_name!='Oil & Gas':
-                            fig.update_traces(line=dict(color="black", width=4), selector=dict(name="SBTi"),)
+                            fig.update_traces(line=dict(color="black", width=4), selector=dict(name="SBTi pathway"),)
 
                         st.plotly_chart(fig)      
 
@@ -299,9 +299,9 @@ for idx, tab in enumerate(tabs):
 
                         # Calculate the median across all models for each year
                         median_values = df_melted.groupby('Year')['Value'].median().reset_index()
-                        median_values['Model'] = 'SBTi'
-                        median_values['Scenario'] = 'SBTi'
-                        median_values['scen_id'] = 'SBTi'
+                        median_values['Model'] = 'SBTi pathway'
+                        median_values['Scenario'] = 'SBTi pathway'
+                        median_values['scen_id'] = 'SBTi pathway'
 
                         # Combine the original data with the median data
                         df_combined = pd.concat([df_melted, median_values])
@@ -321,7 +321,7 @@ for idx, tab in enumerate(tabs):
 
                         # Set the line styles for median and other models
                         fig.update_traces(line=dict(color="grey"), selector=dict(name="scen_id"))
-                        fig.update_traces(line=dict(color="black", width=4), selector=dict(name="SBTi"),)
+                        fig.update_traces(line=dict(color="black", width=4), selector=dict(name="SBTi pathway"),)
 
                         # Set chart height
                         fig.update_layout(height=600, width=1200)  # Adjust the height as needed (default is ~450)
@@ -340,9 +340,9 @@ for idx, tab in enumerate(tabs):
 
                         # Calculate the median across all models for each year
                         median_values = df_melted.groupby('Year')['Value'].median().reset_index()
-                        median_values['Model'] = 'SBTi'
-                        median_values['Scenario'] = 'SBTi'
-                        median_values['scen_id'] = 'SBTi'
+                        median_values['Model'] = 'SBTi pathway'
+                        median_values['Scenario'] = 'SBTi pathway'
+                        median_values['scen_id'] = 'SBTi pathway'
                         
                         
                         if df_melted["Building type"].nunique()==1:
@@ -361,7 +361,7 @@ for idx, tab in enumerate(tabs):
 
                             # Set the line styles for median and other models
                             fig.update_traces(line=dict(color="grey"), selector=dict(name="Country"))
-                            fig.update_traces(line=dict(color="black", width=4), selector=dict(name="SBTi"),)
+                            fig.update_traces(line=dict(color="black", width=4), selector=dict(name="SBTi pathway"),)
 
                             # Set chart height
                             fig.update_layout(height=600, width=1200)  # Adjust the height as needed (default is ~450)
@@ -383,7 +383,7 @@ for idx, tab in enumerate(tabs):
 
                             # Set the line styles for median and other models
                             fig.update_traces(line=dict(color="grey"), selector=dict(name="Building type"))
-                            fig.update_traces(line=dict(color="black", width=4), selector=dict(name="SBTi"),)
+                            fig.update_traces(line=dict(color="black", width=4), selector=dict(name="SBTi pathway"),)
 
                             # Set chart height
                             fig.update_layout(height=600, width=1200)  # Adjust the height as needed (default is ~450)
@@ -572,7 +572,7 @@ for idx, tab in enumerate(tabs):
 
                             # SBTi Median Addition
                             median_values = df_melted.groupby('Year', as_index=False)['Value'].median()
-                            median_values["Scenario"] = "SBTi"
+                            median_values["Scenario"] = "SBTi pathway"
                             df_melted = pd.concat([df_melted, median_values], ignore_index=True)
 
                             unit = df_melted["Unit"].unique()[0] if "Unit" in df_melted.columns and df_melted["Unit"].nunique() == 1 else "Unit (Mixed)"
@@ -589,7 +589,7 @@ for idx, tab in enumerate(tabs):
                             )
                             fig.update_xaxes(type="linear")
                             fig.update_layout(height=600, width=1200)
-                            fig.update_traces(line=dict(color="black", width=4), selector=dict(name="SBTi"))
+                            fig.update_traces(line=dict(color="black", width=4), selector=dict(name="SBTi pathway"))
                             st.plotly_chart(fig, use_container_width=True)
 
                         else:  # OECM
