@@ -372,52 +372,61 @@ if st.session_state.selected_page == "Home":
     # Render the HTML inside Streamlit
     components.html(html_code, height=150)  # Increased height for better visibility
 
-    # Group pages by category with custom background colors
+    # Group pages by category with custom background colors and icons
     categories = {
-        " Energy": {
+        "Energy": {
             "titles": ["Power Generation", "Oil & Gas"],
-            "background_color": "#FFDDC1"  # Light peach
+            "background_color": "#FFDDC1",  # Light peach
+            "icon": "energy_icon.png"  # Replace with your energy icon file
         },
-        "🚊Transport": {
+        "Transport": {
             "titles": ["Road", "Rail", "Aviation"],
-            "background_color": "#D1E8E2"  # Light teal
+            "background_color": "#D1E8E2",  # Light teal
+            "icon": "transport_icon.png"  # Replace with your transport icon file
         },
-        "🏭Heavy Industry": {
+        "Heavy Industry": {
             "titles": ["Steel", "Cement", "Chemical", "Aluminum Production"],
-            "background_color": "#F8C8DC"  # Light pink
+            "background_color": "#F8C8DC",  # Light pink
+            "icon": "heavy_industry_icon.png"  # Replace with your heavy industry icon file
         },
-        "🏭Light Industry": {
-            "titles": ["Light Industries","Apperal & Footwear",  "Pulp & Paper"],
-            "background_color": "#FFFACD"  # Light yellow
+        "Light Industry": {
+            "titles": ["Light Industries", "Apperal & Footwear", "Pulp & Paper"],
+            "background_color": "#FFFACD",  # Light yellow
+            "icon": "light_industry_icon.png"  # Replace with your light industry icon file
         },
-        "🏭Land": {
+        "Land": {
             "titles": ["FLAG"],
-            "background_color": "#abdbe3"  # Light yellow
+            "background_color": "#abdbe3",  # Light blue
+            "icon": "land_icon.png"  # Replace with your land icon file
         },
-        "🪙Finance": {
+        "Finance": {
             "titles": ["Financial Institution"],
-            "background_color": "#E6E6FA"  # Lavender
+            "background_color": "#E6E6FA",  # Lavender
+            "icon": "finance_icon.png"  # Replace with your finance icon file
         },
-        "🏗️Buildings": {
-            "titles": ["Residential", "Commercial",],
-            "background_color": "#F6E5FA"  # Lavender
+        "Buildings": {
+            "titles": ["Residential", "Commercial"],
+            "background_color": "#F6E5FA",  # Lavender
+            "icon": "buildings_icon.png"  # Replace with your buildings icon file
         }
     }
-    
+
     # Render categories and their respective buttons in rows
     category_keys = list(categories.keys())
-    
-    for i in range(0, len(category_keys), 3):  # Iterate two categories at a time
+
+    for i in range(0, len(category_keys), 3):  # Iterate three categories at a time
         col1, col2, col3 = st.columns(3)
 
         for col, category_key in zip([col1, col2, col3], category_keys[i:i + 3]):
             category_data = categories[category_key]
 
             with col:
-                # Add category title with centered alignment and custom background color
+                icon_image = get_base64_image(category_data['icon']) 
+                # Add category title with centered alignment, custom background color, and icon
                 st.markdown(
                     f"""
                     <div style="background-color: {category_data['background_color']}; padding: 10px; border-radius: 8px; text-align: center; margin-bottom: 5px;">
+                        <img src="{icon_image}" style="width: 40px; height: 40px; margin-bottom: 0px;">
                         <strong style="font-size: 18px; color: #333;">{category_key}</strong>
                     </div>
                     """,
@@ -491,10 +500,8 @@ if st.session_state.selected_page == "Home":
 
                         # Close the div wrapper
                         # Wrap the button in a unique class div
-                        st.markdown(f'<div class="{unique_id}">', unsafe_allow_html=True)
-                        st.markdown("</div>", unsafe_allow_html=True)
-                          
-
+                            st.markdown(f'<div class="{unique_id}">', unsafe_allow_html=True)
+                            st.markdown("</div>", unsafe_allow_html=True)
 
 elif st.session_state.selected_page == "Reference":
     
@@ -592,8 +599,8 @@ elif st.session_state.selected_page == "Reference":
                 if "selected_var" not in st.session_state:
                     st.session_state["selected_var"] = categorical_columns[0]
 
-                st.title("Eligible SBTi Scenarios and metrics")
-                st.write("These are the eligible Scenarios that pass the principled-driven criteria used in cross-sector and sector-specific pathways. Also this includes all metrics used in SBTi sector specific standards, as well as metrics for all GHG emission scopes.")
+                st.title("Eligible SBTi Scenarios")
+                st.write("These are the eligible Scenarios that pass the principled-driven criteria used in cross-sector and sector-specific pathways")
                 # Layout: Left (buttons) | Right (data)
                 col1, col2 = st.columns([1, 5])
 
@@ -631,22 +638,20 @@ elif st.session_state.selected_page == "Reference":
                 file_path = dataset_info["file_path"]
                 remove_cols = dataset_info['remove_columns']
                 df = load_full_data(file_path,'criteria', None)
-                st.write('These filters are informed by the guiding principles of the SBTi in its foundational science. They ensure that scenario selection aligns with ambition, responsibility, scientific rigor, actionability, robustness, and transparency. By applying these quantitative criteria, the SBTi ensures that only scientifically robust and equitable pathways are considered.')
+                st.write('This sheet shows the phase out dates for some fossil commodities')
+                st.write('Disclaimer: The sector-specific requirements for key economic activities are derived from specific scenarios e.g IEA to provide additional guidelines on how activities need to transition at interim period on the way to net zero. The activity specific milestones are not available in all IPCC scenarios and there may be wide variations across  IPCC models. Therefore, the granularity that IEA provides for these indicators are useful, even though they may not align with the assumptions from the overall IPCC scenarios.')
                 st.dataframe(df, hide_index=True)
 
             elif dataset_name=="Phase-Out":
                 file_path = dataset_info["file_path"]
                 remove_cols = dataset_info['remove_columns']
                 df = pd.read_excel(file_path,sheet_name='Phase out dates',skiprows=3)
-                st.write('This sheet shows the phase out dates for some fossil commodities')
-                st.write('The sector-specific requirements for key economic activities are derived from specific scenarios e.g IEA to provide additional guidelines on how activities need to transition at interim period on the way to net zero. The activity specific milestones are not available in all IPCC scenarios and there may be wide variations across  IPCC models. Therefore, the granularity that IEA provides for these indicators are useful, even though they may not align with the assumptions from the overall IPCC scenarios.')
                 st.dataframe(df, hide_index=True)
             
             elif dataset_name=="Residuals":
                 file_path = dataset_info["file_path"]
                 remove_cols = dataset_info['remove_columns']
                 df = pd.read_excel(file_path,sheet_name='Residuals',skiprows=2)
-                st.write('This sheet shows the projected residual emissions from emission pathways across the sector standards')
                 st.dataframe(df, hide_index=True)
             else:
                 st.error("Error loading data preview.")
