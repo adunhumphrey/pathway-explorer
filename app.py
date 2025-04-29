@@ -374,7 +374,7 @@ if st.session_state.selected_page == "Home":
 
     # Group pages by category with custom background colors
     categories = {
-        "💡Energy": {
+        " Energy": {
             "titles": ["Power Generation", "Oil & Gas"],
             "background_color": "#FFDDC1"  # Light peach
         },
