@@ -10,7 +10,7 @@ def get_base64_image(image_path):
 
 USER_CREDENTIALS = {
     "humphrey": "password123@",
-    "eoin": "E1on12@"
+    "sbti_user": "pathwayexplorer"
 }
 
 logo_image = get_base64_image("SBT_Logo.png")
